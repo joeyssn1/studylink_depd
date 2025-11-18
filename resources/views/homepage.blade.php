@@ -1,38 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyLink</title>
-    @vite('resources/css/app.css')
-</head>
-
-<body class="bg-white">
-
-    <!-- HEADER -->
-    <header class="w-full bg-[#22335F] text-white">
-        <div class="max-w-5xl mx-auto flex items-center justify-between py-4 px-4">
-
-            <!-- Logo sementara -->
-            <div class="flex items-center space-x-2">
-                <div class="w-7 h-7 bg-white rounded-md flex items-center justify-center">
-                    <span class="text-[#22335F] font-bold text-sm">SL</span>
-                </div>
-                <h1 class="text-xl font-semibold">StudyLink</h1>
-            </div>
-
-            <!-- Navigation button -->
-            <nav class="flex items-center space-x-6 text-white">
-                <a href="#" class="border-b-2 border-white pb-1">Home</a>
-                <a href="#" class="hover:underline">Study</a>
-                <a href="#" class="hover:underline">History</a>
-                <a href="#" class="hover:underline">Profile</a>
-            </nav>
-
-        </div>
-    </header>
-
+<x-layout title="Home">
     <!-- HERO SECTION -->
     <section class="max-w-4xl mx-auto text-center mt-10 px-4">
         <h2 class="text-3xl font-bold text-gray-900">
@@ -105,13 +71,4 @@
             </button>
         </div>
     </section>
-
-
-    <!-- FOOTER -->
-    <footer class="w-full bg-[#22335F] text-white py-4 text-center text-sm">
-        © 2025 Team@DEPD — Universitas Ciputra Surabaya
-    </footer>
-
-</body>
-
-</html>
+</x-layout>
