@@ -6,3 +6,7 @@ Route::get('/', function () {
     return view('homepage');
 });
 
+Route::get('/study', function () {
+    return view('studypage');
+});
+

@@ -12,8 +12,8 @@
 
             <!-- Navigation button -->
             <nav class="flex items-center space-x-6 text-white">
-                <a href="#" class="border-b-2 border-white pb-1">Home</a>
-                <a href="#" class="hover:underline">Study</a>
+                <a href="/" class="border-b-2 border-white pb-1">Home</a>
+                <a href="/study" class="hover:underline">Study</a>
                 <a href="#" class="hover:underline">History</a>
                 <a href="#" class="hover:underline">Profile</a>
             </nav>
