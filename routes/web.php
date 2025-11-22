@@ -10,3 +10,6 @@ Route::get('/study', function () {
     return view('studypage');
 });
 
+Route::get('/pomodoro', function () {
+    return view('pomodoro');
+});
