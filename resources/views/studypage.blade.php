@@ -31,9 +31,8 @@
                 </a>
             </div>
 
-
             <!-- Pomodoro -->
-            <a href=""
+            <a href="/pomodoro"
                 class="w-64 h-64 border shadow-sm flex flex-col items-center justify-center hover:shadow-md transition col-span-2">
                 <div class="w-12 h-12 bg-yellow-400 rounded-full mb-4 mt-8">
                     <span class="text-yellow-600 font-bold">Image</span>
