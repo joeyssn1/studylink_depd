@@ -13,19 +13,19 @@
         <div class="justify-center items-center flex flex-col gap-8 place-items-center">
             <div class="flex flex-col md:flex-row gap-8">
                 <!-- Active Recall -->
-                <a href=""
+                <a href="/active-recall"
                     class="w-64 h-64 border shadow-sm flex flex-col items-center justify-center hover:shadow-md transition">
-                    <div class="w-12 h-12 bg-yellow-400 rounded-full mb-4 mt-8">
-                        <span class="text-yellow-600 font-bold">Image</span>
+                    <div class="w-12 h-12 bg-[#c9a348] rounded-full mb-4 mt-8">
+                        <span class="text-yellow-600 font-bold"></span>
                     </div>
                     <p class="text-lg font-semibold text-center">Active Recall</p>
                 </a>
 
                 <!-- Spaced Repetition -->
-                <a href=""
+                <a href="/spaced-repetition"
                     class="w-64 h-64 border shadow-sm flex flex-col items-center justify-center hover:shadow-md transition">
-                    <div class="w-12 h-12 bg-yellow-400 rounded-full mb-4 mt-8">
-                        <span class="text-yellow-600 font-bold">Image</span>
+                    <div class="w-12 h-12 bg-[#c9a348] rounded-full mb-4 mt-8">
+                        <span class="text-yellow-600 font-bold"></span>
                     </div>
                     <p class="text-lg font-semibold text-center">Spaced Repetition</p>
                 </a>
@@ -34,8 +34,8 @@
             <!-- Pomodoro -->
             <a href="/pomodoro"
                 class="w-64 h-64 border shadow-sm flex flex-col items-center justify-center hover:shadow-md transition col-span-2">
-                <div class="w-12 h-12 bg-yellow-400 rounded-full mb-4 mt-8">
-                    <span class="text-yellow-600 font-bold">Image</span>
+                <div class="w-12 h-12 bg-[#c9a348] rounded-full mb-4 mt-8">
+                    <span class="text-yellow-600 font-bold"></span>
                 </div>
                 <p class="text-lg font-semibold text-center">Pomodoro</p>
             </a>

@@ -13,3 +13,11 @@ Route::get('/study', function () {
 Route::get('/pomodoro', function () {
     return view('pomodoro');
 });
+
+Route::get('/active-recall', function () {
+    return view('recall');
+});
+
+Route::get('/spaced-repetition', function () {
+    return view('repetition');
+});

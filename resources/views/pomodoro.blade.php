@@ -9,7 +9,7 @@
                 <button 
                     x-show="!hasStarted || isPaused"
                     x-on:click="start()" 
-                    class="bg-yellow-400 text-white px-6 py-3 rounded-md hover:bg-yellow-500 transition"
+                    class="bg-[#c9a348] text-white px-6 py-3 rounded-md hover:bg-yellow-500 transition"
                 >
                     Start Timer
                 </button>
