@@ -1,23 +1,20 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
-Route::get('/', function () {
-    return view('homepage');
-});
+// Public pages
+Route::get('/', function () { return view('homepage'); });
+Route::get('/study', function () { return view('studypage'); });
+Route::get('/pomodoro', function () { return view('pomodoro'); });
+Route::get('/active-recall', function () { return view('recall'); });
+Route::get('/spaced-repetition', function () { return view('repetition'); });
 
-Route::get('/study', function () {
-    return view('studypage');
-});
+// Auth pages
+Route::get('/login', [AuthController::class, 'loginPage'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/pomodoro', function () {
-    return view('pomodoro');
-});
+Route::get('/register', [AuthController::class, 'registerPage']);
+Route::post('/register', [AuthController::class, 'register']);
 
-Route::get('/active-recall', function () {
-    return view('recall');
-});
-
-Route::get('/spaced-repetition', function () {
-    return view('repetition');
-});
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
