@@ -36,8 +36,8 @@
     <script>
         function timerComponent() {
             return {
-                originalTime: 20 * 60,
-                time: 20 * 60,
+                originalTime: 25 * 60,
+                time: 25 * 60,
                 interval: null,
                 hasStarted: false,
                 isPaused: false,
