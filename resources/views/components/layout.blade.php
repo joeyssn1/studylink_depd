@@ -5,16 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'StudyLink' }}</title>
-    @vite('resources/css/app.css')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="bg-white">
+<body class="bg-white min-h-screen flex flex-col">
 
     <x-header />
 
-    <main>
+    <main class="flex-1">
         {{ $slot }}
     </main>
+
 
     <x-footer />
 
