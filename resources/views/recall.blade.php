@@ -1,3 +1,5 @@
+{{-- views/recall.blade.php --}}
+
 <x-layout title="Active Recall">
     <x-layoutstudy studyTitle="Active Recall">
 

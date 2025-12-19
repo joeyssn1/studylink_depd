@@ -1,3 +1,5 @@
+{{-- views/pomodoro.blade.php --}}
+
 <x-layout title="Pomodoro">
     <x-layoutstudy studyTitle="Pomodoro">
         <div x-data="timerComponent()" class="flex flex-col items-center">

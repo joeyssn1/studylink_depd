@@ -1,3 +1,5 @@
+{{-- views/auth/login.blade.php --}}
+
 <x-layout title="Login">
 
     <div class="max-w-md mx-auto mt-20 p-6 border shadow">

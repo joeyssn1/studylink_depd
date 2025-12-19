@@ -1,3 +1,5 @@
+{{-- views/studypage.blade.php --}}
+
 <x-layout title="Study">
 
     <section class="max-w-4xl mx-auto text-center mt-10 mb-8 px-4">

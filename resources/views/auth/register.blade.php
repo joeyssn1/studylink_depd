@@ -1,3 +1,5 @@
+{{-- views/auth/register.blade.php --}}
+
 <x-layout title="Register">
 
     <div class="max-w-md mx-auto mt-20 p-6 border shadow">
