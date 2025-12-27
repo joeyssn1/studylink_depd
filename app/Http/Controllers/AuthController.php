@@ -9,13 +9,11 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    // Show login page
     public function loginPage()
     {
         return view('auth.login');
     }
 
-    // Handle login
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -33,13 +31,11 @@ class AuthController extends Controller
         ]);
     }
 
-    // Show register page
     public function registerPage()
     {
         return view('auth.register');
     }
 
-    // Handle register
     public function register(Request $request)
     {
         $data = $request->validate([
@@ -55,10 +51,17 @@ class AuthController extends Controller
         return redirect('/login')->with('success', 'Account created! Please login.');
     }
 
-    // Logout
-    public function logout()
+    public function logout(Request $request)
     {
+        $userId = Auth::id();
+
+        $request->session()->forget("joined_events.user_$userId");
+
         Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return redirect('/');
     }
 }

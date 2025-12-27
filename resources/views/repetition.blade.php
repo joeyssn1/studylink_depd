@@ -1,3 +1,5 @@
+{{-- views/repetition.blade.php --}}
+
 <x-layout title="Spaced Repetition">
     <x-layoutstudy studyTitle="Spaced Repetition">
         <div class="flex flex-col items-center">

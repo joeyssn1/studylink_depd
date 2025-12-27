@@ -1,3 +1,5 @@
+{{-- views/components/studypagetitle.blade.php --}}
+
 <div class="max-w-4xl mx-auto flex flex-col items-center">
     <h2 class="text-4xl font-bold text-gray-900 mb-8">
             {{ $studyTitle }}

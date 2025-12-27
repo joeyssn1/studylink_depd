@@ -1,3 +1,5 @@
+{{-- views/components/header.blade.php --}}
+
 <header class="w-full bg-[#22335F] text-white">
     <div class="max-w-5xl mx-auto flex items-center justify-between py-4 px-4">
 
@@ -12,21 +14,25 @@
         <!-- Navigation -->
         <nav class="flex items-center space-x-6 text-white">
 
-            <!-- Always show Home -->
-            <a href="/" class="hover:underline">Home</a>
+            <!-- Home -->
+            <a href="{{ route('home') }}" class="hover:underline">Home</a>
 
             @auth
                 <a href="/study" class="hover:underline">Study</a>
                 <a href="#" class="hover:underline">History</a>
-                <a href="#" class="hover:underline">Profile</a>
+
+                <!-- Profile -->
+                <a href="{{ route('profile') }}" class="hover:underline">Profile</a>
 
                 <!-- Logout -->
                 <form action="/logout" method="POST" class="inline">
                     @csrf
-                    <button class="ml-4 bg-red-500 px-3 py-1 rounded">Logout</button>
+                    <button type="submit" class="ml-4 bg-red-500 hover:bg-red-600 px-3 py-1 rounded transition">
+                        Logout
+                    </button>
                 </form>
             @else
-                <a href="/login" class="hover:underline">Login</a>
+                <a href="{{ route('login') }}" class="hover:underline">Login</a>
             @endauth
 
         </nav>
