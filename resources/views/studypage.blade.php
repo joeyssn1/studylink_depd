@@ -4,8 +4,9 @@
 
     <section class="max-w-4xl mx-auto text-center mt-10 mb-8 px-4">
         <h2 class="text-3xl font-bold text-gray-900 leading-snug">
-            What would type of <br> study today <br>
-            <span class="font-bold">@username?</span>
+            What type of <br> study would you use today, <br>
+            {{-- Memanggil nama user dari table users --}}
+            <span class="font-bold">{{ auth()->user()->fullname }}?</span>
         </h2>
     </section>
 
@@ -96,7 +97,7 @@
                         Batal
                     </button>
                     <button type="submit"
-                        class="px-4 py-2 bg-[#c9a348] text-white rounded-lg hover:bg-[#b89237] font-semibold transition">
+                        class="px-4 py-2 bg-[#c9a348] text-white rounded-lg  hover:bg-[#b89237] font-semibold transition">
                         Mulai Belajar
                     </button>
                 </div>

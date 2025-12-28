@@ -59,9 +59,20 @@ Route::post('/pomodoro/store', [StudyController::class, 'storePomodoro'])->name(
 // Halaman utama Active Recall
 Route::get('/active-recall/{id}', [StudyController::class, 'activeRecallPage'])->name('active-recall.show');
 
+//upload file
+Route::post('/material/upload', [StudyController::class, 'uploadMaterial'])->name('material.upload');
+
+//question and submit question
+Route::post('/active-recall/generate', [StudyController::class, 'generateQuestions'])->name('recall.generate');
+Route::post('/active-recall/submit', [StudyController::class, 'submitAnswer'])->name('recall.submit');
+
+
 Route::get('/study', fn() => view('studypage'));
 Route::get('/pomodoro', fn() => view('pomodoro'));
-//  Route::get('/active-recall', fn() => view('recall'));
+// Halaman History Belajar
+Route::get('/history', [StudyController::class, 'history'])->name('study.history')->middleware('auth');
+
+
 
 Route::post('/join-event', [EventController::class, 'joinByCode'])
     ->middleware('auth')

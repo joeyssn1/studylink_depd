@@ -19,7 +19,7 @@
 
             @auth
                 <a href="/study" class="hover:underline">Study</a>
-                <a href="#" class="hover:underline">History</a>
+                <a href="/history" class="hover:underline">History</a>
 
                 <!-- Profile -->
                 <a href="{{ route('profile') }}" class="hover:underline">Profile</a>

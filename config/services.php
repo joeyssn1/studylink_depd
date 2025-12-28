@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    // ini untuk API OpenRouter
+    'openrouter' => [
+        'api_key' => env('OPENROUTER_API_KEY'),
+    ],
+
 ];
