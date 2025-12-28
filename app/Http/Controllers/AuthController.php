@@ -16,10 +16,19 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => 'required',
+        // Ganti 'email' menjadi 'login' agar lebih umum
+        $request->validate([
+            'login' => 'required',
             'password' => 'required',
         ]);
+
+        // Cek apakah input adalah email atau username
+        $fieldType = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+        $credentials = [
+            $fieldType => $request->login,
+            'password' => $request->password,
+        ];
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
@@ -27,7 +36,7 @@ class AuthController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'Invalid login details.',
+            'login' => 'Invalid login details.',
         ]);
     }
 
@@ -39,8 +48,9 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
+            'fullname' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users',
+            'email'    => 'required|email|unique:users',
             'password' => 'required|min:6|confirmed',
         ]);
 

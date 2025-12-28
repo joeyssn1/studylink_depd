@@ -10,10 +10,6 @@
         <p class="text-sm text-gray-600 mt-4">
             Learn effective methods to study smarter <br> and achieve better results
         </p>
-
-        <button class="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-lg">
-            Get Started
-        </button>
     </section>
 
     <!-- STUDY TECHNIQUES -->
@@ -32,14 +28,6 @@
 
             <div class="flex flex-col items-center text-center">
                 <div class="w-12 h-12 bg-yellow-200 rounded-full mb-3"></div>
-                <p class="text-sm font-semibold">Spaced Repetition</p>
-                <p class="text-gray-600 text-xs mt-2">
-                    Enhances long-term retention through intervals.
-                </p>
-            </div>
-
-            <div class="flex flex-col items-center text-center">
-                <div class="w-12 h-12 bg-yellow-200 rounded-full mb-3"></div>
                 <p class="text-sm font-semibold">Pomodoro</p>
                 <p class="text-gray-600 text-xs mt-2">
                     Time management technique to stay focused.
@@ -52,16 +40,26 @@
     <!-- TRACK PROGRESS -->
     <section class="max-w-5xl mx-auto mt-10 px-4 mb-4">
         <h3 class="text-xl font-semibold text-gray-900 mb-3">Track Your Progress</h3>
-        <p class="text-gray-600 mb-4">
-            Monitor your study habits and stay motivated as you learn.
-        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white p-6 rounded-2xl border shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 bg-[#c9a348] rounded-full flex items-center justify-center text-white">
+                    🚀
+                </div>
+                <div>
+                    <p class="text-gray-500 text-sm font-medium">Pomodoro Sessions</p>
+                    <h3 class="text-2xl font-bold text-gray-900">{{ $pomodoro_count }}</h3>
+                </div>
+            </div>
 
-        <div class="flex items-center gap-4">
-            <div class="flex-1 h-3 bg-gray-200 rounded-full"></div>
-            <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg">
-                Update
-            </button>
-        </div>
+            <div class="bg-white p-6 rounded-2xl border shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 bg-[#c9a348] rounded-full flex items-center justify-center text-white">
+                    🧠
+                </div>
+                <div>
+                    <p class="text-gray-500 text-sm font-medium">Active Recall Sessions</p>
+                    <h3 class="text-2xl font-bold text-gray-900">{{ $active_count }}</h3>
+                </div>
+            </div>
     </section>
 
     @if (session('success'))
