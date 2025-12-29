@@ -87,11 +87,11 @@
 {{-- views/pomodoro.blade.php --}}
 <x-layout title="Pomodoro Session">
     <div class="max-w-4xl mx-auto mt-20 text-center">
-        <h1 class="text-2xl font-bold text-gray-800 mb-2">Subject: {{ $study->subject_name }}</h1>
+        <h1 class="text-4xl font-bold text-gray-800 mb-2">Subject: {{ $study->subject_name }}</h1>
         <p class="text-gray-500 mb-10">Selesaikan sesi belajarmu dengan teknik Pomodoro.</p>
 
         <div id="timer-container" class="hidden mb-10">
-            <h2 id="status-label" class="text-xl font-semibold mb-4 text-[#c9a348]">Focus Time</h2>
+            <h2 id="status-label" class="text-xl font-semibold text-[#c9a348]">Focus Time</h2>
             <div class="text-8xl font-mono font-bold text-gray-900 mb-8" id="timer-display">
                 00:00
             </div>
@@ -104,8 +104,8 @@
         <div id="start-button-container">
             <button type="button" onclick="toggleModal('modal-settings')"
                 class="w-64 h-64 bg-[#c9a348] text-white rounded-full shadow-xl hover:scale-105 transition-transform flex flex-col items-center justify-center mx-auto">
-                <span class="text-2xl font-bold">Start Study</span>
-                <span class="text-sm opacity-80 mt-2">Set your timer</span>
+                <span class="text-3xl font-bold">Mulai Belajar</span>
+                <span class="text-md opacity-80">dengan mengatur timer anda</span>
             </button>
         </div>
     </div>
@@ -247,10 +247,10 @@
         const container = document.getElementById('timer-container');
 
         if (isFocus) {
-            label.innerText = "🚀 Focus Time";
+            label.innerText = "Focus Time";
             label.style.color = "#c9a348"; // Warna emas
         } else {
-            label.innerText = "☕ Rest Time";
+            label.innerText = "Rest Time";
             label.style.color = "#10b981"; // Warna hijau (emerald)
         }
     }

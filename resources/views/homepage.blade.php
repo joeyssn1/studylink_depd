@@ -16,7 +16,7 @@
     <section class="max-w-5xl mx-auto mt-10 px-4">
         <h3 class="text-xl font-semibold text-gray-900 mb-4">Study Techniques</h3>
 
-        <div class="grid grid-cols-3 gap-4 mt-6">
+        <div class="grid grid-cols-2 gap-4 mt-6">
 
             <div class="flex flex-col items-center text-center">
                 <div class="w-12 h-12 bg-yellow-200 rounded-full mb-3"></div>
