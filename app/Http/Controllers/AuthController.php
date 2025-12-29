@@ -9,19 +9,26 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    // Show login page
     public function loginPage()
     {
         return view('auth.login');
     }
 
-    // Handle login
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => 'required',
+        // Ganti 'email' menjadi 'login' agar lebih umum
+        $request->validate([
+            'login' => 'required',
             'password' => 'required',
         ]);
+
+        // Cek apakah input adalah email atau username
+        $fieldType = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+        $credentials = [
+            $fieldType => $request->login,
+            'password' => $request->password,
+        ];
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
@@ -29,22 +36,21 @@ class AuthController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'Invalid login details.',
+            'login' => 'Invalid login details.',
         ]);
     }
 
-    // Show register page
     public function registerPage()
     {
         return view('auth.register');
     }
 
-    // Handle register
     public function register(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
+            'fullname' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users',
+            'email'    => 'required|email|unique:users',
             'password' => 'required|min:6|confirmed',
         ]);
 
@@ -55,10 +61,17 @@ class AuthController extends Controller
         return redirect('/login')->with('success', 'Account created! Please login.');
     }
 
-    // Logout
-    public function logout()
+    public function logout(Request $request)
     {
+        $userId = Auth::id();
+
+        $request->session()->forget("joined_events.user_$userId");
+
         Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return redirect('/');
     }
 }

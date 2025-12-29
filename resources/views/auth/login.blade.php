@@ -11,13 +11,15 @@
             @csrf
 
             <div class="mb-4">
-                <label>Email</label>
-                <input type="email" name="email" class="w-full border p-2" required>
-            </div>
+                <label>Email or Username</label>
+                <input type="text" name="login" class="w-full border p-2" value="{{ old('login') }}" required
+                placeholder="email/username" required>
+            </div>  
 
             <div class="mb-4">
                 <label>Password</label>
-                <input type="password" name="password" class="w-full border p-2" required>
+                <input type="password" name="password" class="w-full border p-2" required
+                placeholder="Min 6 char" required>
             </div>
 
             <button class="w-full bg-blue-600 text-white p-2 rounded">Login</button>
