@@ -8,6 +8,7 @@ use App\Models\StudyCounting;
 use App\Models\Material;
 use App\Models\Question;
 use App\Models\UserAnswer;
+use App\Models\MaterialSummary;
 
 
 use Illuminate\Http\Request;
@@ -138,7 +139,14 @@ class StudyController extends Controller
             $text = $pdf->getText();
 
             $cleanText = preg_replace('/\s+/', ' ', $text);
-            $context = substr($cleanText, 0, 4000);
+            $material = Material::findOrFail($request->material_id);
+
+            // Generate summary if not exists
+            if (!$material->summary) {
+                $this->generateSummary($material);
+            }
+
+            $context = $material->summary->summary_text;
 
             // Prompt diperingkas tanpa field explanation
             $prompt = "Buatkan {$request->num_questions} soal pilihan ganda dari materi ini. 
@@ -215,5 +223,51 @@ class StudyController extends Controller
             'is_correct' => $isCorrect,
             'correct_answer' => $question->correct_answer,
         ]);
+    }
+
+    public function generateSummary(Material $material)
+    {
+        $filePath = storage_path('app/public/' . $material->file_path);
+
+        $parser = new Parser();
+        $pdf = $parser->parseFile($filePath);
+        $text = preg_replace('/\s+/', ' ', $pdf->getText());
+
+        // Limit raw text to avoid token explosion
+        $context = substr($text, 0, 6000);
+
+        $prompt = "
+    Ringkas materi berikut menjadi ringkasan belajar yang jelas, padat, dan terstruktur.
+    Fokus pada konsep utama dan definisi penting.
+
+    Materi:
+    {$context}
+    ";
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . config('services.openrouter.api_key'),
+            'Content-Type' => 'application/json',
+        ])->timeout(120)
+            ->post('https://openrouter.ai/api/v1/chat/completions', [
+                'model' => 'qwen/qwen-2.5-vl-7b-instruct:free',
+                'messages' => [
+                    ['role' => 'user', 'content' => $prompt]
+                ],
+                'temperature' => 0.3,
+            ]);
+
+        if ($response->failed()) {
+            throw new \Exception('AI summary failed');
+        }
+
+        $summaryText = $response->json()['choices'][0]['message']['content'];
+
+        return MaterialSummary::updateOrCreate(
+            ['material_id' => $material->material_id],
+            [
+                'summary_text' => trim($summaryText),
+                'ai_model' => 'qwen-2.5-vl-7b',
+            ]
+        );
     }
 }
