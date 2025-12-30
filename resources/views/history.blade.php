@@ -3,13 +3,13 @@
     <div class="max-w-5xl mx-auto mt-10 px-4">
         <h1 class="text-3xl font-bold text-gray-900 mb-8">Riwayat Belajar</h1>
 
-        <div class="bg-white shadow-sm border rounded-xl overflow-hidden">
+        <div class="bg-white shadow-sm border rounded-xl overflow-hidden my-10">
             <table class="w-full text-left border-collapse">
-                <thead class="bg-gray-50 border-b">
+                <thead class="bg-[#c9a348] border-b">
                     <tr>
-                        <th class="px-6 py-4 text-sm font-semibold text-gray-600 uppercase">Teknik</th>
-                        <th class="px-6 py-4 text-sm font-semibold text-gray-600 uppercase">Subjek / Topik</th>
-                        <th class="px-6 py-4 text-sm font-semibold text-gray-600 uppercase text-right">Tanggal</th>
+                        <th class="px-6 py-4 text-sm font-semibold text-white uppercase">Teknik</th>
+                        <th class="px-6 py-4 text-sm font-semibold text-white uppercase">Subjek / Topik</th>
+                        <th class="px-6 py-4 text-sm font-semibold text-white uppercase text-right">Tanggal</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y">
