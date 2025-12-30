@@ -14,4 +14,10 @@ class Material extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function summary()
+    {
+    return $this->hasOne(MaterialSummary::class, 'material_id');
+    }
+
 }
