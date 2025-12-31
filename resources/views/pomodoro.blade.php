@@ -86,22 +86,38 @@
 
 {{-- views/pomodoro.blade.php --}}
 <x-layout title="Pomodoro Session">
-    <div class="max-w-4xl mx-auto mt-20 text-center">
-        <h1 class="text-4xl font-bold text-gray-800 mb-2">Subject: {{ $study->subject_name }}</h1>
-        <p class="text-gray-500 mb-10">Selesaikan sesi belajarmu dengan teknik Pomodoro.</p>
+    <div class="max-w-4xl mx-auto mt-15 text-center">
 
-        <div id="timer-container" class="hidden mb-10">
-            <h2 id="status-label" class="text-xl font-semibold text-[#c9a348]">Focus Time</h2>
-            <div class="text-8xl font-mono font-bold text-gray-900 mb-8" id="timer-display">
-                00:00
+        <div id="timer-container" class="hidden flex flex-col items-center">
+            <h2 class="text-4xl font-bold text-gray-900">
+                Pomodoro
+            </h2>
+            <p class="text-sm text-gray-500 mb-8">
+                Mempelajari subject: {{ $study->subject_name }}
+            </p>
+
+            <div class="bg-[#c9a348] text-yellow-700 w-32 h-32 rounded-full flex items-center justify-center mb-7">
+                <span class="text-4xl font-bold"></span>
             </div>
+
+            <p id="status-label" class="text-2xl font-bold mb-2 text-[#c9a348]">
+                Focus Time
+            </p>
+
+            <h1 id="timer-display" class="text-7xl font-bold tracking-wide mb-7 text-gray-900">
+                00:00
+            </h1>
+
             <button onclick="endSession()"
-                class="px-8 py-3 bg-red-500 text-white rounded-full font-bold hover:bg-red-600 transition">
-                End Session
+                class="bg-red-500 text-white font-bold px-6 py-3 rounded-md hover:bg-red-600 transition">
+                Stop Session
             </button>
         </div>
 
         <div id="start-button-container">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">Subject: {{ $study->subject_name }}</h1>
+            <p class="text-gray-500 mb-10">Selesaikan sesi belajarmu dengan teknik Pomodoro.</p>
+
             <button type="button" onclick="toggleModal('modal-settings')"
                 class="w-64 h-64 bg-[#c9a348] text-white rounded-full shadow-xl hover:scale-105 transition-transform flex flex-col items-center justify-center mx-auto">
                 <span class="text-3xl font-bold">Mulai Belajar</span>
@@ -233,7 +249,7 @@
         const remainderSeconds = seconds % 60;
 
         // Format agar selalu 2 digit (00:00)
-        const display = `${minutes}:${remainderSeconds < 10 ? '0' : ''}${remainderSeconds}`;
+        const display = `${minutes < 10 ? '0' : ''}${minutes}:${remainderSeconds < 10 ? '0' : ''}${remainderSeconds}`;
 
         // Update di halaman
         document.getElementById('timer-display').innerText = display;
@@ -262,8 +278,8 @@
     }
 
     function endSession() {
-    if (confirm('Akhiri sesi belajar sekarang?')) {
-        window.location.href = "/study"; // Sesuaikan dengan route halaman depanmu
+        if (confirm('Akhiri sesi belajar sekarang?')) {
+            window.location.href = "/study"; // Sesuaikan dengan route halaman depanmu
+        }
     }
-}
 </script>
