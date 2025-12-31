@@ -22,6 +22,9 @@
                         <span class="text-yellow-600 font-bold"></span>
                     </div>
                     <p class="text-lg font-semibold text-center">Active Recall</p>
+                    <p class="text-sm text-gray-500 mt-2 px-4">
+                        Mengingat kembali informasi yang telah dipelajari sebelumnya eengan bantuan AI partner.
+                    </p>
                 </button>
 
                 <!-- pomodoro -->
@@ -31,6 +34,9 @@
                         <span class="text-yellow-600 font-bold"></span>
                     </div>
                     <p class="text-lg font-semibold text-center">Pomodoro</p>
+                    <p class="text-sm text-gray-500 mt-2 px-4">
+                        Teknik manajemen waktu yang membagi sesi belajar menjadi interval fokus dan istirahat.
+                    </p>
                 </button>
             </div>
 
