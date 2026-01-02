@@ -68,7 +68,7 @@
     </div>
 
     <div class="max-w-6xl mx-auto mt-10 px-4 flex flex-col md:flex-row gap-6">
-        <div class="flex-1 flex flex-col bg-white border rounded-xl shadow-sm h-[600px]">
+        <div class="mb-10 flex-1 flex flex-col bg-white border rounded-xl shadow-sm h-[600px]">
             <div class="p-4 border-b bg-gray-50 rounded-t-xl flex justify-between items-center">
                 <div>
                     <h2 class="font-bold text-gray-800">AI Study Partner</h2>
@@ -80,7 +80,7 @@
             <div id="chat-box" class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
                 <div class="flex justify-start">
                     <div class="bg-white border text-gray-800 p-3 rounded-lg max-w-[80%] shadow-sm">
-                        Halo **{{ auth()->user()->fullname }}**! 👋 Silakan pilih materi di sebelah kiri, lalu beri tahu
+                        Halo {{ auth()->user()->fullname }}! 👋 Silakan pilih materi di atas, lalu beri tahu
                         aku berapa soal yang ingin kamu kerjakan hari ini.
                     </div>
                 </div>
@@ -100,7 +100,6 @@
                     Send
                 </button>
             </div>
-
 
         </div>
     </div>

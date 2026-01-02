@@ -1,6 +1,6 @@
 <x-layout title="Register">
 
-    <div class="max-w-md mx-auto mt-20 p-6 border shadow">
+    <div class="max-w-md mx-auto my-10 p-6 border shadow">
         <h2 class="text-3xl font-bold mb-6 text-gray-800">Register</h2>
 
         @if ($errors->any())
