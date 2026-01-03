@@ -1,10 +1,10 @@
 {{-- views/components/header.blade.php --}}
 
 <header class="w-full bg-[#22335F] text-white">
-    <div class="max-w-5xl mx-auto flex items-center justify-between py-4 px-4">
+    <div class="max-w-5xl mx-auto flex items-center justify-between px-4">
 
         <!-- Logo -->
-        <div class="flex items-center space-x-2">
+        <div class="flex items-center space-x-2 py-4">
             <div class="w-7 h-7 bg-white rounded-md flex items-center justify-center">
                 <span class="text-[#22335F] font-bold text-sm">SL</span>
             </div>
@@ -12,27 +12,55 @@
         </div>
 
         <!-- Navigation -->
-        <nav class="flex items-center space-x-6 text-white">
+        <nav class="flex items-center space-x-6 font-medium h-full">
+
+            @php
+                // ACTIVE: text + underline kuning emas
+                $activeClass = 'text-[#c9a348] border-b-4 border-[#c9a348] shadow-[0_2px_0_rgba(201,163,72,0.9)]';
+
+                // INACTIVE: putih, underline muncul saat hover
+                $inactiveClass = 'text-white border-b-4 border-transparent hover:border-[#c9a348]';
+            @endphp
 
             <!-- Home -->
-            <a href="{{ route('home') }}" class="hover:underline">Home</a>
+            <a href="{{ route('home') }}"
+               class="py-5 transition-all duration-200 {{ request()->routeIs('home') ? $activeClass : $inactiveClass }}">
+                Home
+            </a>
 
             @auth
-                <a href="/study" class="hover:underline">Study</a>
-                <a href="/history" class="hover:underline">History</a>
+                <!-- Study -->
+                <a href="/study"
+                   class="py-5 transition-all duration-200 {{ request()->is('study*') ? $activeClass : $inactiveClass }}">
+                    Study
+                </a>
+
+                <!-- History -->
+                <a href="/history"
+                   class="py-5 transition-all duration-200 {{ request()->is('history*') ? $activeClass : $inactiveClass }}">
+                    History
+                </a>
 
                 <!-- Profile -->
-                <a href="{{ route('profile') }}" class="hover:underline">Profile</a>
+                <a href="{{ route('profile') }}"
+                   class="py-5 transition-all duration-200 {{ request()->routeIs('profile') ? $activeClass : $inactiveClass }}">
+                    Profile
+                </a>
 
                 <!-- Logout -->
-                <form action="/logout" method="POST" class="inline">
+                <form action="/logout" method="POST" class="inline ml-4">
                     @csrf
-                    <button type="submit" class="ml-4 bg-red-500 hover:bg-red-600 px-3 py-1 rounded transition">
+                    <button type="submit"
+                        class="bg-red-500 hover:bg-red-600 px-3 py-1 rounded transition">
                         Logout
                     </button>
                 </form>
             @else
-                <a href="{{ route('login') }}" class="hover:underline">Login</a>
+                <!-- Login -->
+                <a href="{{ route('login') }}"
+                   class="py-5 transition-all duration-200 {{ request()->routeIs('login') ? $activeClass : $inactiveClass }}">
+                    Login
+                </a>
             @endauth
 
         </nav>
