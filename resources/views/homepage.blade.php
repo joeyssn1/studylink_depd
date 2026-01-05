@@ -1,6 +1,6 @@
-{{-- resources/views/homepage.blade.php --}}
 <x-layout title="Home">
 
+    <!-- ================= HERO ================= -->
     <section class="max-w-6xl mx-auto mt-14 px-4 grid md:grid-cols-2 gap-10 items-center animate-fade-in-up">
         <div>
             <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">
@@ -15,20 +15,21 @@
 
             <div class="mt-6 flex gap-4">
                 <a href="#calendar"
-                   class="px-6 py-3 rounded-xl bg-red-500 hover:bg-red-600 text-white font-bold shadow-md transition">
+                    class="px-6 py-3 rounded-xl bg-red-500 hover:bg-red-600 text-white font-bold shadow-md transition">
                     Start Focusing
                 </a>
 
                 <a href="{{ route('profile') }}"
-                   class="px-6 py-3 rounded-xl border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition">
-                    Manage Events
+                    class="px-6 py-3 rounded-xl border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition">
+                    My Events
                 </a>
             </div>
         </div>
 
         <div class="flex justify-center">
             <div class="relative w-64 h-64 rounded-full bg-red-100 flex items-center justify-center shadow-lg">
-                <div class="w-40 h-40 rounded-full bg-red-500 flex items-center justify-center text-white text-5xl font-extrabold">
+                <div
+                    class="w-40 h-40 rounded-full bg-red-500 flex items-center justify-center text-white text-5xl font-extrabold">
                     25
                 </div>
                 <span class="absolute bottom-6 text-sm text-gray-600 tracking-wide">
@@ -97,26 +98,26 @@
         </div>
     </section>
 
-    <!-- ================= FLASH MESSAGE ================= -->
+    <!-- ================= FLASH ================= -->
     @if (session('success'))
         <div class="max-w-5xl mx-auto px-4 mt-6">
-            <div class="bg-green-100 text-green-700 px-4 py-3 rounded-xl flex items-center gap-2 shadow-sm">
-                <i class="ri-checkbox-circle-line"></i> {{ session('success') }}
+            <div class="bg-green-100 text-green-700 px-4 py-3 rounded-xl shadow-sm">
+                {{ session('success') }}
             </div>
         </div>
     @endif
 
     @if (session('error'))
         <div class="max-w-5xl mx-auto px-4 mt-6">
-            <div class="bg-red-100 text-red-700 px-4 py-3 rounded-xl flex items-center gap-2 shadow-sm">
-                <i class="ri-error-warning-line"></i> {{ session('error') }}
+            <div class="bg-red-100 text-red-700 px-4 py-3 rounded-xl shadow-sm">
+                {{ session('error') }}
             </div>
         </div>
     @endif
 
     <!-- ================= CALENDAR ================= -->
     <section id="calendar" class="max-w-6xl mx-auto mt-20 px-4 mb-24">
-        <div class="bg-white border border-gray-200 rounded-3xl shadow-xl p-6 md:p-10">
+        <div class="bg-white border rounded-3xl shadow-xl p-6 md:p-10">
 
             <h2 class="text-2xl font-bold text-gray-900 mb-8 text-center">
                 Study Calendar 🗓️
@@ -124,14 +125,36 @@
 
             <div class="flex flex-col md:flex-row items-center justify-between mb-8 gap-6">
                 <div class="flex items-center gap-6">
-                    <button onclick="prevMonth()" class="w-10 h-10 rounded-full bg-gray-50 hover:bg-green-50 transition">
+                    <button onclick="prevMonth()" class="w-10 h-10 rounded-full bg-gray-50 hover:bg-green-50">
                         <i class="ri-arrow-left-s-line text-xl"></i>
                     </button>
 
-                    <span id="monthYear" class="text-2xl font-bold min-w-[200px] text-center cursor-pointer"
-                          onclick="toggleYearPicker()"></span>
+                    <div class="relative flex items-center gap-2">
 
-                    <button onclick="nextMonth()" class="w-10 h-10 rounded-full bg-gray-50 hover:bg-green-50 transition">
+                        <!-- MONTH -->
+                        <button id="monthBtn" class="text-2xl font-bold hover:text-green-600 transition">
+                            January
+                        </button>
+
+                        <!-- YEAR -->
+                        <button id="yearBtn" class="text-2xl font-bold hover:text-green-600 transition">
+                            2026
+                        </button>
+
+                        <!-- MONTH DROPDOWN -->
+                        <div id="monthDropdown"
+                            class="hidden absolute top-12 left-0 bg-white border rounded-xl shadow-lg grid grid-cols-3 gap-2 p-4 z-50 w-72">
+                        </div>
+
+
+                        <!-- YEAR DROPDOWN -->
+                        <div id="yearDropdown"
+                            class="hidden absolute top-12 right-0 bg-white border rounded-xl shadow-lg grid grid-cols-3 gap-2 p-4 z-50 w-60">
+                        </div>
+
+                    </div>
+
+                    <button onclick="nextMonth()" class="w-10 h-10 rounded-full bg-gray-50 hover:bg-green-50">
                         <i class="ri-arrow-right-s-line text-xl"></i>
                     </button>
                 </div>
@@ -139,17 +162,14 @@
                 <form action="{{ route('events.join') }}" method="POST" class="flex gap-2 w-full md:w-auto">
                     @csrf
                     <input type="text" name="code" maxlength="6" placeholder="ENTER CODE"
-                        class="border px-4 py-2 rounded-lg text-center tracking-widest uppercase font-mono w-full md:w-40">
+                        class="border px-4 py-2 rounded-lg text-center tracking-widest font-mono w-full md:w-40">
                     <button class="bg-gray-900 text-white px-6 py-2 rounded-lg font-bold">JOIN</button>
                 </form>
             </div>
 
-            <div id="yearPicker"
-                class="hidden grid grid-cols-5 gap-3 mb-6 p-4 bg-gray-50 rounded-2xl border max-h-56 overflow-y-auto custom-scrollbar"></div>
-
             <div class="grid grid-cols-7 text-center mb-4">
-                @foreach (['Sun','Mon','Tue','Wed','Thu','Fri','Sat'] as $d)
-                    <div class="text-xs font-bold text-gray-400 uppercase tracking-widest py-2">{{ $d }}</div>
+                @foreach (['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as $d)
+                    <div class="text-xs font-bold text-gray-400 uppercase py-2">{{ $d }}</div>
                 @endforeach
             </div>
 
@@ -164,148 +184,198 @@
                 <h3 id="modalTitle" class="font-bold text-lg"></h3>
                 <button onclick="closeDayModal()"><i class="ri-close-line text-xl"></i></button>
             </div>
-            <div id="dayContent" class="p-4 max-h-[60vh] overflow-y-auto custom-scrollbar bg-gray-50"></div>
-            <div class="p-4 border-t text-center">
-                <a href="{{ route('profile') }}" class="text-green-600 font-semibold hover:underline">
-                    Manage Events
-                </a>
-            </div>
+            <div id="dayContent" class="p-4 max-h-[60vh] overflow-y-auto bg-gray-50"></div>
         </div>
     </div>
 
     <!-- ================= SCRIPT ================= -->
-<script>
-    let currentDate = new Date();
-    const events = @json($joinedEvents);
+    <script>
+        let currentDate = new Date();
+        const events = @json($joinedEvents);
+        const authUserId = {{ auth()->id() ?? 'null' }};
 
-    function renderCalendar() {
-        const monthYear = document.getElementById('monthYear');
-        const calendarDays = document.getElementById('calendarDays');
-
-        const year = currentDate.getFullYear();
-        const month = currentDate.getMonth();
-        const today = new Date();
+        const monthBtn = document.getElementById('monthBtn');
+        const yearBtn = document.getElementById('yearBtn');
+        const monthDropdown = document.getElementById('monthDropdown');
+        const yearDropdown = document.getElementById('yearDropdown');
 
         const monthNames = [
-            "January","February","March","April","May","June",
-            "July","August","September","October","November","December"
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
         ];
 
-        monthYear.innerText = `${monthNames[month]} ${year}`;
-        calendarDays.innerHTML = "";
+        /* =====================
+           CALENDAR RENDER
+        ====================== */
+        function renderCalendar() {
+            const calendarDays = document.getElementById('calendarDays');
 
-        const firstDay = new Date(year, month, 1).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            const today = new Date();
 
-        for (let i = 0; i < firstDay; i++) {
-            calendarDays.innerHTML += `<div></div>`;
-        }
+            monthBtn.innerText = monthNames[month];
+            yearBtn.innerText = year;
 
-        for (let day = 1; day <= daysInMonth; day++) {
-            const dateKey = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-            const dayEvents = events[dateKey] ? Object.values(events[dateKey]) : [];
-            const isToday =
-                day === today.getDate() &&
-                month === today.getMonth() &&
-                year === today.getFullYear();
+            calendarDays.innerHTML = "";
 
-            calendarDays.innerHTML += `
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            for (let i = 0; i < firstDay; i++) {
+                calendarDays.innerHTML += `<div></div>`;
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dayEvents = events[dateKey] ? Object.values(events[dateKey]) : [];
+                const isToday =
+                    day === today.getDate() &&
+                    month === today.getMonth() &&
+                    year === today.getFullYear();
+
+                calendarDays.innerHTML += `
                 <div onclick="openDay('${dateKey}')"
                     class="h-24 md:h-32 rounded-xl p-3 cursor-pointer
                     ${isToday ? 'bg-green-100' : 'bg-gray-50 hover:bg-white'}
                     border transition">
-
                     <div class="font-bold mb-1">${day}</div>
-
                     ${dayEvents.length ? `
-                        <div class="flex flex-wrap gap-1 mt-1">
-                            ${dayEvents.slice(0,3).map(() =>
-                                `<span class="w-2 h-2 rounded-full bg-red-500"></span>`
-                            ).join('')}
-                        </div>
-                    ` : ''}
-                </div>
-            `;
+                                <div class="flex gap-1 mt-1">
+                                    ${dayEvents.slice(0,3).map(() =>
+                                        `<span class="w-2 h-2 bg-red-500 rounded-full"></span>`
+                                    ).join('')}
+                                </div>` : ''}
+                </div>`;
+            }
         }
-    }
 
-    function openDay(date) {
-        const modal = document.getElementById('dayModal');
-        const title = document.getElementById('modalTitle');
-        const content = document.getElementById('dayContent');
+        /* =====================
+           DAY MODAL
+        ====================== */
+        function openDay(date) {
+            const modal = document.getElementById('dayModal');
+            const title = document.getElementById('modalTitle');
+            const content = document.getElementById('dayContent');
 
-        title.innerText = `Events on ${date}`;
-        content.innerHTML = "";
+            title.innerText = `Events on ${date}`;
+            content.innerHTML = "";
 
-        const dayEvents = events[date] ? Object.values(events[date]) : [];
+            const dayEvents = events[date] ? Object.values(events[date]) : [];
 
-        if (dayEvents.length === 0) {
-            content.innerHTML = `
-                <div class="text-center text-gray-500 py-10">
-                    <p class="font-semibold mb-1">No events on this day</p>
-                    <p class="text-sm">Enjoy your free time ✨</p>
-                </div>
-            `;
-        } else {
-            dayEvents.forEach(event => {
-                content.innerHTML += `
-                    <div class="bg-white border rounded-xl p-4 mb-3 shadow-sm">
-                        <div class="flex justify-between items-center mb-2">
-                            <h4 class="font-bold text-gray-800">
-                                ${event.event_name}
-                            </h4>
-                            <span class="text-xs px-2 py-1 rounded-full bg-green-100 text-green-700 font-bold">
-                                EVENT
+            if (!dayEvents.length) {
+                content.innerHTML = `<p class="text-center text-gray-500 py-10">No events</p>`;
+            } else {
+                dayEvents.forEach(event => {
+                    const isCreator = authUserId === event.user_id;
+
+                    content.innerHTML += `
+                    <div class="bg-white border rounded-xl p-4 mb-3">
+                        <div class="flex justify-between mb-2">
+                            <strong>${event.event_name}</strong>
+                            <span class="text-xs px-2 py-1 rounded-full ${
+                                isCreator ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'
+                            }">
+                                ${isCreator ? 'Creator' : 'Joined'}
                             </span>
                         </div>
+                        <p class="text-sm text-gray-500">⏰ ${event.start_time} - ${event.end_time}</p>
+                        <p class="text-sm text-gray-700 mt-2">${event.description}</p>
 
-                        <p class="text-sm text-gray-500 mb-1">
-                            📅 ${event.date} • ⏰ ${event.time}
-                        </p>
+                        <div class="text-center border-t mt-3 pt-3">
+                            ${
+                                isCreator
+                                    ? `<a href="{{ route('profile') }}" class="text-green-600 font-semibold hover:underline">Manage Event</a>`
+                                    : `<form action="/events/${event.id}/leave" method="POST"
+                                                     onsubmit="return confirm('Remove this event?')">
+                                                   @csrf
+                                                   @method('DELETE')
+                                                   <button class="text-red-600 font-semibold hover:underline">Remove Event</button>
+                                               </form>`
+                            }
+                        </div>
+                    </div>`;
+                });
+            }
 
-                        <p class="text-sm text-gray-700">
-                            ${event.description}
-                        </p>
-                    </div>
-                `;
-            });
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
         }
 
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-    }
+        function closeDayModal() {
+            const modal = document.getElementById('dayModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
 
-    function closeDayModal() {
-        const modal = document.getElementById('dayModal');
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-    }
+        /* =====================
+           MONTH DROPDOWN
+        ====================== */
+        monthDropdown.innerHTML = monthNames.map((m, i) => `
+        <button class="px-3 py-2 rounded-lg hover:bg-green-100 text-sm"
+                onclick="selectMonth(${i})">
+            ${m}
+        </button>
+    `).join('');
 
-    function nextMonth() {
-        currentDate.setMonth(currentDate.getMonth() + 1);
+        function selectMonth(index) {
+            currentDate.setMonth(index);
+            monthDropdown.classList.add('hidden');
+            renderCalendar();
+        }
+
+        monthBtn.addEventListener('click', () => {
+            monthDropdown.classList.toggle('hidden');
+            yearDropdown.classList.add('hidden');
+        });
+
+        /* =====================
+           YEAR DROPDOWN
+        ====================== */
+        function renderYearDropdown() {
+            const currentYear = currentDate.getFullYear();
+            let years = [];
+
+            for (let i = currentYear - 4; i <= currentYear + 4; i++) {
+                years.push(i);
+            }
+
+            yearDropdown.innerHTML = years.map(y => `
+            <button class="px-3 py-2 rounded-lg hover:bg-green-100 text-sm ${
+                y === currentYear ? 'bg-green-50 font-bold' : ''
+            }"
+            onclick="selectYear(${y})">
+                ${y}
+            </button>
+        `).join('');
+        }
+
+        function selectYear(year) {
+            currentDate.setFullYear(year);
+            yearDropdown.classList.add('hidden');
+            renderCalendar();
+        }
+
+        yearBtn.addEventListener('click', () => {
+            renderYearDropdown();
+            yearDropdown.classList.toggle('hidden');
+            monthDropdown.classList.add('hidden');
+        });
+
+        /* =====================
+           OUTSIDE CLICK CLOSE
+        ====================== */
+        document.addEventListener('click', e => {
+            if (!e.target.closest('#monthBtn') &&
+                !e.target.closest('#yearBtn') &&
+                !e.target.closest('#monthDropdown') &&
+                !e.target.closest('#yearDropdown')) {
+                monthDropdown.classList.add('hidden');
+                yearDropdown.classList.add('hidden');
+            }
+        });
+
         renderCalendar();
-    }
-
-    function prevMonth() {
-        currentDate.setMonth(currentDate.getMonth() - 1);
-        renderCalendar();
-    }
-
-    function toggleYearPicker() {
-        document.getElementById('yearPicker').classList.toggle('hidden');
-    }
-
-    renderCalendar();
-</script>
-
-    <!-- ================= STYLE ================= -->
-    <style>
-        .animate-fade-in-up { animation: fadeInUp .8s ease-out forwards; }
-        @keyframes fadeInUp { from {opacity:0;transform:translateY(10px)} to {opacity:1;transform:none} }
-        .animate-zoom-in { animation: zoomIn .2s ease-out forwards; }
-        @keyframes zoomIn { from {opacity:0;transform:scale(.95)} to {opacity:1;transform:scale(1)} }
-        .custom-scrollbar::-webkit-scrollbar { width: 6px }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background:#cbd5e1;border-radius:10px }
-    </style>
+    </script>
 
 </x-layout>

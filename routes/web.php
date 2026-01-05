@@ -7,14 +7,12 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\StudyController;
 
 use App\Models\Event;
-use App\Models\StudyCounting; 
+use App\Models\StudyCounting;
 
-// ====================================================
-// HALAMAN UTAMA (HOMEPAGE)
-// ====================================================
+// HOMEPAGE
 Route::get('/', function () {
 
-    // 1. Jika user tidak login, kirim data kosong agar tidak error
+    // Guest user
     if (!Auth::check()) {
         return view('homepage', [
             'joinedEvents' => [],
@@ -23,110 +21,101 @@ Route::get('/', function () {
         ]);
     }
 
+    /** @var \App\Models\User $user */
     $user = Auth::user();
 
-    // 2. LOGIC BARU (REVISI): Mengambil Event Buatan Sendiri + Event Join
-    
-    // A. Ambil event yang dibuat sendiri
+    // A. Events created by user
     $createdEvents = Event::where('user_id', $user->id)->get();
 
-    // B. Ambil event yang di-join (sebagai peserta)
-    $joinedEvents = $user->joinedEvents ?? collect(); 
+    // B. Events joined by user
+    $joinedEvents = $user->joinedEvents()->get();
 
-    // C. Gabungkan keduanya & hapus duplikat jika ada
-    $allEvents = $createdEvents->merge($joinedEvents)->unique('id');
+    // C. Merge & remove duplicates
+    $allEvents = $createdEvents
+        ->merge($joinedEvents)
+        ->unique('id');
 
-    // 3. Format data agar bisa dibaca oleh Javascript Kalender
-    // Kita group berdasarkan tanggal ('date')
-    $formattedEvents = $allEvents->groupBy('date')->map(function ($items) {
-        return $items->map(function ($event) {
-            return [
-                'id' => $event->id,             // Penting untuk Edit/Delete
-                'user_id' => $event->user_id,   // Penting untuk validasi pemilik
-                'event_name' => $event->event_name,
-                'time' => $event->time,
-                'description' => $event->description,
-            ];
+    // D. Format for calendar JS (group by date)
+    $formattedEvents = $allEvents
+        ->groupBy('date')
+        ->map(function ($items) {
+            return $items->map(function ($event) {
+                return [
+                    'id'         => $event->id,
+                    'user_id'    => $event->user_id,
+                    'event_name' => $event->event_name,
+                    'date'       => $event->date,
+                    'start_time' => $event->start_time,
+                    'end_time'   => $event->end_time,
+                    'description' => $event->description,
+                ];
+            });
         });
-    });
 
-    // 4. Mengambil data statistik belajar (Pomodoro & Active Recall)
+    // Study statistics
     $stats = StudyCounting::where('user_id', $user->id)->first();
 
-    // 5. Kirim semua data ke view homepage
     return view('homepage', [
-        'joinedEvents' => $formattedEvents,       // <-- Data Event sekarang sudah LENGKAP
-        'pomodoro_count' => $stats->pomodoro_count ?? 0,
-        'active_count' => $stats->active_count ?? 0,
+        'joinedEvents'     => $formattedEvents,
+        'pomodoro_count'   => $stats->pomodoro_count ?? 0,
+        'active_count'     => $stats->active_count ?? 0,
     ]);
 })->name('home');
 
 
-// ====================================================
-// FITUR STUDY & POMODORO
-// ====================================================
-
-// Simpan history awal
+// STUDY & POMODORO
 Route::post('/study/store', [StudyController::class, 'store'])->name('study.store');
-
-// Halaman utama Pomodoro (mengirim ID study agar tersambung)
 Route::get('/pomodoro/{id}', [StudyController::class, 'pomodoroPage'])->name('pomodoro.show');
-
-// Simpan settingan pomodoro
 Route::post('/pomodoro/store', [StudyController::class, 'storePomodoro'])->name('pomodoro.store');
 
-// Halaman utama Active Recall
 Route::get('/active-recall/{id}', [StudyController::class, 'activeRecallPage'])->name('active-recall.show');
-
-// Upload file material
 Route::post('/material/upload', [StudyController::class, 'uploadMaterial'])->name('material.upload');
-
-// Generate question & submit answer
 Route::post('/active-recall/generate', [StudyController::class, 'generateQuestions'])->name('recall.generate');
 Route::post('/active-recall/submit', [StudyController::class, 'submitAnswer'])->name('recall.submit');
 
-Route::get('/study', fn() => view('studypage'));
-Route::get('/pomodoro', fn() => view('pomodoro'));
+Route::get('/study', fn () => view('studypage'));
+Route::get('/pomodoro', fn () => view('pomodoro'));
 
-// Halaman History Belajar
-Route::get('/history', [StudyController::class, 'history'])->name('study.history')->middleware('auth');
+Route::get('/history', [StudyController::class, 'history'])
+    ->middleware('auth')
+    ->name('study.history');
 
 
-// ====================================================
-// FITUR EVENTS & PROFILE
-// ====================================================
+// EVENTS & PROFILE
 
-// Join Event via Code
+// Join event via code
 Route::post('/join-event', [EventController::class, 'joinByCode'])
     ->middleware('auth')
     ->name('events.join');
 
-// Halaman Profile
+// Profile page
 Route::get('/profile', function () {
     return view('profilepage', [
         'events' => Event::where('user_id', Auth::id())->get()
     ]);
 })->middleware('auth')->name('profile');
 
-// Create New Event
+// Create event
 Route::post('/events', [EventController::class, 'store'])
-    ->middleware('auth');
+    ->middleware('auth')
+    ->name('events.store');
 
-// Update Event (Edit)
+// Update event
 Route::put('/events/{id}', [EventController::class, 'update'])
     ->middleware('auth')
     ->name('events.update');
 
-// Delete Event (Hapus)
+// Delete event
 Route::delete('/events/{id}', [EventController::class, 'destroy'])
     ->middleware('auth')
     ->name('events.destroy');
 
+Route::delete('/events/{id}/leave', [EventController::class, 'leave'])
+    ->middleware('auth')
+    ->name('events.leave');
+    
 
-// ====================================================
-// AUTHENTICATION
-// ====================================================
-
+// AUTH
 Route::get('/login', [AuthController::class, 'loginPage'])
     ->middleware('guest')
     ->name('login');

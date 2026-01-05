@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,9 +12,10 @@ class EventController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'event_name' => 'required',
-            'date' => 'required|date',
-            'time' => 'required',
+            'event_name'  => 'required',
+            'date'        => 'required|date',
+            'start_time'  => 'required',
+            'end_time'    => 'required|after:start_time',
             'description' => 'required',
         ]);
 
@@ -22,15 +24,16 @@ class EventController extends Controller
         } while (Event::where('code', $code)->exists());
 
         Event::create([
-            'user_id' => Auth::id(),
-            'event_name' => $request->event_name,
-            'date' => $request->date,
-            'time' => $request->time,
+            'user_id'     => Auth::id(),
+            'event_name'  => $request->event_name,
+            'date'        => $request->date,
+            'start_time'  => $request->start_time,
+            'end_time'    => $request->end_time,
             'description' => $request->description,
-            'code' => $code,
+            'code'        => $code,
         ]);
 
-        return redirect()->back()->with('success', 'Event created!');
+        return back()->with('success', 'Event created!');
     }
 
     public function joinByCode(Request $request)
@@ -45,69 +48,99 @@ class EventController extends Controller
             return back()->with('error', 'Invalid event code.');
         }
 
+        /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        if (! $user instanceof \App\Models\User) {
-            return back()->with('error', 'Not authenticated as user.');
+        // 🔒 TIME CONFLICT CHECK
+        $conflict = $user->joinedEvents()
+            ->where('date', $event->date)
+            ->where(function ($query) use ($event) {
+                $query->where(function ($q) use ($event) {
+                    $q->where('start_time', '<', $event->end_time)
+                        ->where('end_time', '>', $event->start_time);
+                });
+            })
+            ->exists();
+
+        if ($conflict) {
+            return back()->with(
+                'error',
+                'Cannot join event. Time conflict detected.'
+            );
         }
 
         $user->joinedEvents()->syncWithoutDetaching([$event->id]);
 
-        return back()->with('success', 'Event added to calender!');
+        return back()->with('success', 'Event added to calendar!');
     }
+
     public function update(Request $request, $id)
     {
-        // 1. Cari event berdasarkan ID
         $event = Event::find($id);
 
-        // 2. Cek apakah event ada?
         if (!$event) {
             return back()->with('error', 'Event not found.');
         }
 
-        // 3. KEAMANAN: Cek apakah yang mau edit adalah pemilik event?
         if ($event->user_id !== Auth::id()) {
             return back()->with('error', 'You are not the event maker!');
         }
 
-        // 4. Validasi input (sama seperti store)
         $request->validate([
-            'event_name' => 'required',
-            'date' => 'required|date',
-            'time' => 'required',
+            'event_name'  => 'required',
+            'date'        => 'required|date',
+            'start_time'  => 'required',
+            'end_time'    => 'required|after:start_time',
             'description' => 'required',
         ]);
 
-        // 5. Simpan perubahan
         $event->update([
-            'event_name' => $request->event_name,
-            'date' => $request->date,
-            'time' => $request->time,
+            'event_name'  => $request->event_name,
+            'date'        => $request->date,
+            'start_time'  => $request->start_time,
+            'end_time'    => $request->end_time,
             'description' => $request->description,
         ]);
 
         return back()->with('success', 'Event updated!');
     }
 
-    // --- FUNGSI DESTROY (Hapus Data) ---
     public function destroy($id)
     {
-        // 1. Cari event
         $event = Event::find($id);
 
-        // 2. Cek ada atau tidak
         if (!$event) {
             return back()->with('error', 'Event not found.');
         }
 
-        // 3. KEAMANAN: Cek pemilik
         if ($event->user_id !== Auth::id()) {
-            return back()->with('error', 'You are not authorized to delete this event');
+            return back()->with('error', 'You are not authorized.');
         }
 
-        // 4. Hapus
         $event->delete();
 
         return back()->with('success', 'Event deleted!');
+    }
+
+    public function leave($id)
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $event = Event::find($id);
+
+        if (!$event) {
+            return back()->with('error', 'Event not found.');
+        }
+
+        // Creator cannot leave their own event
+        if ($event->user_id === $user->id) {
+            return back()->with('error', 'You cannot leave your own event.');
+        }
+
+        // Detach user from event
+        $user->joinedEvents()->detach($event->id);
+
+        return back()->with('success', 'Event removed from your calendar.');
     }
 }

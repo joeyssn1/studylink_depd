@@ -13,7 +13,8 @@ class Event extends Model
         'user_id',
         'event_name',
         'date',
-        'time',
+        'start_time',
+        'end_time',
         'description',
         'code',
     ];
