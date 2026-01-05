@@ -1,110 +1,171 @@
 {{-- views/studypage.blade.php --}}
-
 <x-layout title="Study">
 
-    <section class="max-w-4xl mx-auto text-center mt-10 mb-8 px-4">
-        <h2 class="text-3xl font-bold text-gray-900 leading-snug">
-            What type of <br> study would you use today, <br>
-            {{-- Memanggil nama user dari table users --}}
-            <span class="font-bold">{{ auth()->user()->fullname }}?</span>
-        </h2>
+    <!-- HEADER -->
+    <section class="max-w-5xl mx-auto text-center mt-16 mb-12 px-4">
+        <h1 class="text-4xl font-extrabold text-gray-900 leading-snug">
+            How would you like to study today,
+            <br>
+            <span class="text-[#c9a348]">
+                {{ auth()->user()->fullname }}?
+            </span>
+        </h1>
+
+        <p class="text-gray-500 mt-4 max-w-2xl mx-auto">
+            Choose a study technique that fits your learning style.
+            Focus deeply or train your memory actively.
+        </p>
     </section>
 
-    <!-- Study Options -->
-    <section class="max-w-5xl mx-auto mt-10 mb-8 px-4">
+    <!-- STUDY OPTIONS -->
+    <section class="max-w-6xl mx-auto px-4 mb-24">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
 
-        <div class="justify-center items-center flex flex-col gap-8 place-items-center">
-            <div class="flex flex-col md:flex-row gap-8">
-                <!-- active recall -->
-                <button type="button" onclick="toggleModal('modal-active-recall')"
-                    class="w-64 h-64 border shadow-sm flex flex-col items-center justify-center hover:shadow-md transition bg-white">
-                    <div class="w-12 h-12 bg-[#c9a348] rounded-full mb-4 mt-8">
-                        <span class="text-yellow-600 font-bold"></span>
-                    </div>
-                    <p class="text-lg font-semibold text-center">Active Recall</p>
-                    <p class="text-sm text-gray-500 mt-2 px-4">
-                        Mengingat kembali informasi yang telah dipelajari sebelumnya eengan bantuan AI partner.
-                    </p>
-                </button>
+            <!-- ACTIVE RECALL CARD -->
+            <div
+                onclick="toggleModal('modal-active-recall')"
+                class="group cursor-pointer bg-white border rounded-3xl shadow-sm hover:shadow-xl transition p-10 text-center"
+            >
+                <div
+                    class="w-16 h-16 rounded-full bg-[#c9a348]/20 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition"
+                >
+                    <span class="text-2xl font-bold text-[#c9a348]">🧠</span>
+                </div>
 
-                <!-- pomodoro -->
-                <button type="button" onclick="toggleModal('modal-pomodoro')"
-                    class="w-64 h-64 border shadow-sm flex flex-col items-center justify-center hover:shadow-md transition col-span-2 bg-white">
-                    <div class="w-12 h-12 bg-[#c9a348] rounded-full mb-4 mt-8">
-                        <span class="text-yellow-600 font-bold"></span>
-                    </div>
-                    <p class="text-lg font-semibold text-center">Pomodoro</p>
-                    <p class="text-sm text-gray-500 mt-2 px-4">
-                        Teknik manajemen waktu yang membagi sesi belajar menjadi interval fokus dan istirahat.
-                    </p>
-                </button>
+                <h2 class="text-2xl font-bold mb-3 text-gray-800">
+                    Active Recall
+                </h2>
+
+                <p class="text-gray-500 text-sm leading-relaxed mb-6">
+                    Strengthen your memory by recalling information
+                    actively with help from an AI study partner.
+                </p>
+
+                <span
+                    class="inline-block mt-auto px-6 py-2 rounded-full text-sm font-bold bg-[#c9a348] text-white group-hover:bg-[#b89237] transition"
+                >
+                    Start Recall
+                </span>
             </div>
 
+            <!-- POMODORO CARD -->
+            <div
+                onclick="toggleModal('modal-pomodoro')"
+                class="group cursor-pointer bg-white border rounded-3xl shadow-sm hover:shadow-xl transition p-10 text-center"
+            >
+                <div
+                    class="w-16 h-16 rounded-full bg-[#c9a348]/20 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition"
+                >
+                    <span class="text-2xl font-bold text-[#c9a348]">🍅</span>
+                </div>
+
+                <h2 class="text-2xl font-bold mb-3 text-gray-800">
+                    Pomodoro Technique
+                </h2>
+
+                <p class="text-gray-500 text-sm leading-relaxed mb-6">
+                    Manage your focus using time-boxed sessions
+                    with structured breaks.
+                </p>
+
+                <span
+                    class="inline-block mt-auto px-6 py-2 rounded-full text-sm font-bold bg-[#c9a348] text-white group-hover:bg-[#b89237] transition"
+                >
+                    Start Pomodoro
+                </span>
+            </div>
 
         </div>
-
     </section>
 
-    <!-- pomodoro -->
-    <div id="modal-pomodoro"
-        class="fixed inset-0 z-50 hidden bg-gray-900 bg-opacity-50 flex items-center justify-center">
-        <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
-            <h2 class="text-xl font-bold mb-4">Mulai Sesi Pomodoro</h2>
+    <!-- POMODORO -->
+    <div
+        id="modal-pomodoro"
+        class="fixed inset-0 z-50 hidden bg-black/60 flex items-center justify-center px-4"
+    >
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 animate-fade-in">
+            <h2 class="text-2xl font-bold mb-6 text-center">
+                Start Pomodoro Session
+            </h2>
 
             <form action="{{ route('study.store') }}" method="POST">
                 @csrf
                 <input type="hidden" name="study_type" value="Pomodoro">
 
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2">
-                        Apa yang ingin kamu pelajari?
+                <div class="mb-6">
+                    <label class="block font-semibold mb-2 text-gray-700">
+                        What will you study?
                     </label>
-                    <input type="text" name="subject_name" required
-                        class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#c9a348]"
-                        placeholder="Contoh: Belajar Laravel Dasar">
+                    <input
+                        type="text"
+                        name="subject_name"
+                        required
+                        placeholder="Example: Laravel Basics"
+                        class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-[#c9a348]"
+                    >
                 </div>
 
-                <div class="flex justify-end gap-2">
-                    <button type="button" onclick="toggleModal('modal-pomodoro')"
-                        class="px-4 py-2 text-gray-500 hover:text-gray-700 font-semibold">
-                        Batal
+                <div class="flex justify-end gap-3">
+                    <button
+                        type="button"
+                        onclick="toggleModal('modal-pomodoro')"
+                        class="px-4 py-2 text-gray-500 hover:text-gray-700"
+                    >
+                        Cancel
                     </button>
-                    <button type="submit"
-                        class="px-4 py-2 bg-[#c9a348] text-white rounded-lg hover:bg-[#b89237] font-semibold transition">
-                        Lanjut ke Page Pomodoro
+
+                    <button
+                        type="submit"
+                        class="px-6 py-2 bg-[#c9a348] hover:bg-[#b89237] text-white rounded-xl font-bold transition"
+                    >
+                        Continue
                     </button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- active recall -->
-    <div id="modal-active-recall"
-        class="fixed inset-0 z-50 hidden bg-gray-900 bg-opacity-50 flex items-center justify-center">
-        <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
-            <h2 class="text-xl font-bold mb-4">Mulai Sesi Active Recall</h2>
+    <!-- ACTIVE RECALL -->
+    <div
+        id="modal-active-recall"
+        class="fixed inset-0 z-50 hidden bg-black/60 flex items-center justify-center px-4"
+    >
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 animate-fade-in">
+            <h2 class="text-2xl font-bold mb-6 text-center">
+                Start Active Recall
+            </h2>
 
             <form action="{{ route('study.store') }}" method="POST">
                 @csrf
                 <input type="hidden" name="study_type" value="ActiveRecall">
 
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2">
-                        Subjek atau Topik Recall
+                <div class="mb-6">
+                    <label class="block font-semibold mb-2 text-gray-700">
+                        Recall Topic
                     </label>
-                    <input type="text" name="subject_name" required
-                        class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#c9a348]"
-                        placeholder="Contoh: Anatomi Tubuh Manusia">
+                    <input
+                        type="text"
+                        name="subject_name"
+                        required
+                        placeholder="Example: Human Anatomy"
+                        class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-[#c9a348]"
+                    >
                 </div>
 
-                <div class="flex justify-end gap-2">
-                    <button type="button" onclick="toggleModal('modal-active-recall')"
-                        class="px-4 py-2 text-gray-500 hover:text-gray-700 font-semibold">
-                        Batal
+                <div class="flex justify-end gap-3">
+                    <button
+                        type="button"
+                        onclick="toggleModal('modal-active-recall')"
+                        class="px-4 py-2 text-gray-500 hover:text-gray-700"
+                    >
+                        Cancel
                     </button>
-                    <button type="submit"
-                        class="px-4 py-2 bg-[#c9a348] text-white rounded-lg  hover:bg-[#b89237] font-semibold transition">
-                        Mulai Belajar
+
+                    <button
+                        type="submit"
+                        class="px-6 py-2 bg-[#c9a348] hover:bg-[#b89237] text-white rounded-xl font-bold transition"
+                    >
+                        Start Learning
                     </button>
                 </div>
             </form>
@@ -113,27 +174,27 @@
 
 </x-layout>
 
-
-{{-- 4. TARUH SCRIPT DI SINI (Di luar layout agar bersih) --}}
+{{-- SCRIPT --}}
 <script>
-    function toggleModal(modalID) {
-        const modal = document.getElementById(modalID);
-        if (modal) {
-            // Menghapus 'hidden' untuk memunculkan, menambah 'hidden' untuk menyembunyikan
-            modal.classList.toggle('hidden');
-        }
+    function toggleModal(id) {
+        const modal = document.getElementById(id);
+        if (modal) modal.classList.toggle('hidden');
     }
 
-    // Supaya kalau klik di luar kotak putih, modalnya tertutup
-    window.onclick = function(event) {
-        const modalPomodoro = document.getElementById('modal-pomodoro');
-        const modalRecall = document.getElementById('modal-active-recall');
-
-        if (event.target == modalPomodoro) {
-            toggleModal('modal-pomodoro');
-        }
-        if (event.target == modalRecall) {
-            toggleModal('modal-active-recall');
-        }
+    window.onclick = function (event) {
+        ['modal-pomodoro', 'modal-active-recall'].forEach(id => {
+            const modal = document.getElementById(id);
+            if (event.target === modal) toggleModal(id);
+        });
     }
 </script>
+
+<style>
+.animate-fade-in {
+    animation: fadeIn .2s ease-out;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(.95); }
+    to   { opacity: 1; transform: scale(1); }
+}
+</style>

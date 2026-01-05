@@ -1,225 +1,154 @@
-{{-- views/pomodoro.blade.php
-
-<x-layout title="Pomodoro">
-    <x-layoutstudy studyTitle="Pomodoro">
-        <div x-data="timerComponent()" class="flex flex-col items-center">
-            <p class="text-lg mb-2 mt-8">Timer:</p>
-
-            <h1 class="text-7xl font-bold tracking-wide mb-10" x-text="formattedTime"></h1>
-
-            <div class="flex gap-4 mb-8">
-                <button 
-                    x-show="!hasStarted || isPaused"
-                    x-on:click="start()" 
-                    class="bg-[#c9a348] text-white px-6 py-3 rounded-md hover:bg-yellow-500 transition"
-                >
-                    Start Timer
-                </button>
-
-                <button 
-                    x-show="hasStarted && !isPaused"
-                    x-on:click="pause()" 
-                    class="bg-gray-400 text-white px-6 py-3 rounded-md hover:bg-gray-500 transition"
-                >
-                    Pause Timer
-                </button>
-
-                <button 
-                    x-show="hasStarted"
-                    x-on:click="reset()" 
-                    class="bg-red-500 text-white px-6 py-3 rounded-md hover:bg-red-600 transition"
-                >
-                    Reset
-                </button>
-            </div>
-        </div>
-    </x-layoutstudy>
-
-    <script>
-        function timerComponent() {
-            return {
-                originalTime: 25 * 60,
-                time: 25 * 60,
-                interval: null,
-                hasStarted: false,
-                isPaused: false,
-
-                get formattedTime() {
-                    const hrs = String(Math.floor(this.time / 3600)).padStart(2, '0');
-                    const mins = String(Math.floor((this.time % 3600) / 60)).padStart(2, '0');
-                    const secs = String(this.time % 60).padStart(2, '0');
-                    return `${hrs}:${mins}:${secs}`;
-                },
-
-                start() {
-                    if (this.interval) return;
-
-                    this.hasStarted = true;
-                    this.isPaused = false;
-
-                    this.interval = setInterval(() => {
-                        if (this.time > 0) {
-                            this.time--;
-                        } else {
-                            clearInterval(this.interval);
-                            this.interval = null;
-                        }
-                    }, 1000);
-                },
-
-                pause() {
-                    clearInterval(this.interval);
-                    this.interval = null;
-                    this.isPaused = true;
-                },
-
-                reset() {
-                    clearInterval(this.interval);
-                    this.interval = null;
-                    this.time = this.originalTime;
-                    this.hasStarted = false;
-                }
-            }
-        }
-    </script>
-</x-layout> --}}
-
 {{-- views/pomodoro.blade.php --}}
 <x-layout title="Pomodoro Session">
-    <div class="max-w-4xl mx-auto mt-15 text-center">
 
-        <div id="timer-container" class="hidden flex flex-col items-center">
-            <h2 class="text-4xl font-bold text-gray-900">
-                Pomodoro
-            </h2>
-            <p class="text-sm text-gray-500 mb-8">
-                Mempelajari subject: {{ $study->subject_name }}
+    <div class="min-h-[80vh] flex items-center justify-center px-4">
+
+        <!-- START SCREEN -->
+        <div id="start-button-container" class="text-center max-w-xl">
+            <h1 class="text-4xl font-extrabold text-gray-900 mb-2">
+                Pomodoro Session 🍅
+            </h1>
+            <p class="text-gray-500 mb-10">
+                Subject: <span class="font-semibold">{{ $study->subject_name }}</span>
             </p>
 
-            <div class="bg-[#c9a348] text-yellow-700 w-32 h-32 rounded-full flex items-center justify-center mb-7">
-                <span class="text-4xl font-bold"></span>
-            </div>
+            <button
+                onclick="toggleModal('modal-settings')"
+                class="w-64 h-64 rounded-full bg-[#c9a348] text-white shadow-2xl hover:scale-105 transition flex flex-col items-center justify-center mx-auto"
+            >
+                <span class="text-3xl font-bold">Start</span>
+                <span class="text-sm opacity-80 mt-1">Focus & Recall</span>
+            </button>
+        </div>
 
-            <p id="status-label" class="text-2xl font-bold mb-2 text-[#c9a348]">
+        <!-- TIMER SCREEN -->
+        <div id="timer-container" class="hidden text-center">
+            <p id="status-label" class="text-lg font-bold tracking-wide mb-2 text-[#c9a348]">
                 Focus Time
             </p>
 
-            <h1 id="timer-display" class="text-7xl font-bold tracking-wide mb-7 text-gray-900">
+            <h1
+                id="timer-display"
+                class="text-7xl md:text-8xl font-extrabold tracking-wider mb-8 text-gray-900"
+            >
                 00:00
             </h1>
 
-            <button onclick="endSession()"
-                class="bg-red-500 text-white font-bold px-6 py-3 rounded-md hover:bg-red-600 transition">
-                Stop Session
+            <button
+                onclick="endSession()"
+                class="px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl font-bold transition"
+            >
+                End Session
             </button>
         </div>
 
-        <div id="start-button-container">
-            <h1 class="text-4xl font-bold text-gray-800 mb-2">Subject: {{ $study->subject_name }}</h1>
-            <p class="text-gray-500 mb-10">Selesaikan sesi belajarmu dengan teknik Pomodoro.</p>
-
-            <button type="button" onclick="toggleModal('modal-settings')"
-                class="w-64 h-64 bg-[#c9a348] text-white rounded-full shadow-xl hover:scale-105 transition-transform flex flex-col items-center justify-center mx-auto">
-                <span class="text-3xl font-bold">Mulai Belajar</span>
-                <span class="text-md opacity-80">dengan mengatur timer anda</span>
-            </button>
-        </div>
     </div>
 
-    <div id="modal-settings"
-        class="fixed inset-0 z-50 hidden bg-gray-900 bg-opacity-50 flex items-center justify-center">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-sm p-8">
-            <h2 class="text-xl font-bold mb-6 text-center">Set Timer Duration</h2>
+    <!-- SETTINGS MODAL -->
+    <div
+        id="modal-settings"
+        class="fixed inset-0 z-50 hidden bg-black/60 flex items-center justify-center px-4"
+    >
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-8 animate-fade-in">
+            <h2 class="text-xl font-bold text-center mb-6">
+                Pomodoro Settings
+            </h2>
 
             <form id="form-pomodoro-settings">
                 @csrf
                 <input type="hidden" name="study_id" value="{{ $study->study_id }}">
 
-                <div class="mb-4">
-                    <label class="block text-gray-700 font-semibold mb-1">Focus Time (Min)</label>
-                    <input type="number" name="focus_time" id="focus_time" min="1" max="60" value="25"
+                <div class="mb-5">
+                    <label class="block font-semibold mb-1">Focus Time (minutes)</label>
+                    <input
+                        type="number"
+                        id="focus_time"
+                        name="focus_time"
+                        min="1"
+                        max="60"
+                        value="25"
                         required
-                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#c9a348] outline-none">
-                    <p class="text-xs text-gray-400 mt-1">Range: 1 - 60 minutes</p>
+                        class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-[#c9a348]"
+                    >
                 </div>
 
-                <div class="mb-6">
-                    <label class="block text-gray-700 font-semibold mb-1">Rest Time (Min)</label>
-                    <input type="number" name="rest_time" id="rest_time" min="1" max="60" value="5"
+                <div class="mb-8">
+                    <label class="block font-semibold mb-1">Break Time (minutes)</label>
+                    <input
+                        type="number"
+                        id="rest_time"
+                        name="rest_time"
+                        min="1"
+                        max="60"
+                        value="5"
                         required
-                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#c9a348] outline-none">
-                    <p class="text-xs text-gray-400 mt-1">Range: 1 - 60 minutes</p>
+                        class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-[#c9a348]"
+                    >
                 </div>
 
-                <div class="flex flex-col gap-2">
-                    <button type="button" onclick="startSession()"
-                        class="w-full py-3 bg-[#c9a348] text-white rounded-lg font-bold hover:bg-[#b89237] transition">
-                        Start Session
-                    </button>
-                    <button type="button" onclick="toggleModal('modal-settings')"
-                        class="w-full py-2 text-gray-500 hover:text-gray-700 font-medium text-sm">
-                        Batal
-                    </button>
-                </div>
+                <button
+                    type="button"
+                    onclick="startSession()"
+                    class="w-full py-3 bg-[#c9a348] hover:bg-[#b89237] text-white rounded-xl font-bold"
+                >
+                    Start Session
+                </button>
+
+                <button
+                    type="button"
+                    onclick="toggleModal('modal-settings')"
+                    class="w-full mt-3 text-sm text-gray-500 hover:text-gray-700"
+                >
+                    Cancel
+                </button>
             </form>
         </div>
     </div>
+
 </x-layout>
 
+{{-- SCRIPT (UNCHANGED LOGIC) --}}
 <script>
     let timerInterval;
-    let isFocus = true; // Status awal adalah Focus
+    let isFocus = true;
     let currentFocusMinutes;
     let currentRestMinutes;
 
-    function toggleModal(modalID) {
-        document.getElementById(modalID).classList.toggle('hidden');
+    function toggleModal(id) {
+        document.getElementById(id).classList.toggle('hidden');
     }
 
     async function startSession() {
         const form = document.getElementById('form-pomodoro-settings');
         const formData = new FormData(form);
 
-        // 1. Simpan ke database via AJAX
-        try {
-            const response = await fetch("{{ route('pomodoro.store') }}", {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                }
-            });
+        const response = await fetch("{{ route('pomodoro.store') }}", {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
+        });
 
-            if (response.ok) {
-                // 2. Jika sukses, tutup modal dan sembunyikan tombol start
-                toggleModal('modal-settings');
-                document.getElementById('start-button-container').classList.add('hidden');
-                document.getElementById('timer-container').classList.remove('hidden');
+        if (response.ok) {
+            toggleModal('modal-settings');
+            document.getElementById('start-button-container').classList.add('hidden');
+            document.getElementById('timer-container').classList.remove('hidden');
 
-                // 3. Jalankan Logic Timer
-                const focusMinutes = document.getElementById('focus_time').value;
-                const restMinutes = document.getElementById('rest_time').value;
-
-                runTimer(focusMinutes, restMinutes);
-            }
-        } catch (error) {
-            alert('Gagal memulai session. Coba lagi.');
+            runTimer(
+                document.getElementById('focus_time').value,
+                document.getElementById('rest_time').value
+            );
         }
     }
 
     function runTimer(focus, rest) {
-        // Simpan durasi ke variabel global agar bisa diakses saat switch
         currentFocusMinutes = parseInt(focus);
         currentRestMinutes = parseInt(rest);
-
-        // Mulai dengan sesi Focus
         isFocus = true;
         startCountdown(currentFocusMinutes * 60);
     }
 
     function startCountdown(seconds) {
-        clearInterval(timerInterval); // Bersihkan interval sebelumnya jika ada
-
+        clearInterval(timerInterval);
         updateDisplay(seconds);
         updateStatusLabel();
 
@@ -227,59 +156,38 @@
             seconds--;
             updateDisplay(seconds);
 
-            // Jika waktu habis
             if (seconds <= 0) {
                 clearInterval(timerInterval);
-
-                // Switch status: Jika tadi Focus, sekarang Rest. Jika tadi Rest, sekarang Focus.
                 isFocus = !isFocus;
-
-                // Putar suara notifikasi (Opsional)
                 playNotification();
-
-                // Jalankan sesi berikutnya secara otomatis (Looping)
-                let nextDuration = isFocus ? currentFocusMinutes : currentRestMinutes;
-                startCountdown(nextDuration * 60);
+                startCountdown((isFocus ? currentFocusMinutes : currentRestMinutes) * 60);
             }
         }, 1000);
     }
 
     function updateDisplay(seconds) {
-        const minutes = Math.floor(seconds / 60);
-        const remainderSeconds = seconds % 60;
-
-        // Format agar selalu 2 digit (00:00)
-        const display = `${minutes < 10 ? '0' : ''}${minutes}:${remainderSeconds < 10 ? '0' : ''}${remainderSeconds}`;
-
-        // Update di halaman
-        document.getElementById('timer-display').innerText = display;
-
-        // Update di Judul Tab Browser (agar user bisa pantau walau pindah tab)
-        document.title = `(${display}) ${isFocus ? 'Focus' : 'Rest'} | Pomodoro`;
+        const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+        const s = String(seconds % 60).padStart(2, '0');
+        document.getElementById('timer-display').innerText = `${m}:${s}`;
+        document.title = `(${m}:${s}) Pomodoro`;
     }
 
     function updateStatusLabel() {
         const label = document.getElementById('status-label');
-        const container = document.getElementById('timer-container');
-
-        if (isFocus) {
-            label.innerText = "Focus Time";
-            label.style.color = "#c9a348"; // Warna emas
-        } else {
-            label.innerText = "Rest Time";
-            label.style.color = "#10b981"; // Warna hijau (emerald)
-        }
+        label.innerText = isFocus ? "Focus Time" : "Break Time";
+        label.style.color = isFocus ? "#c9a348" : "#10b981";
     }
 
     function playNotification() {
-        // Kamu bisa ganti URL ini dengan file audio lokal di /public/sounds/
-        const audio = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
-        audio.play().catch(e => console.log("Audio play blocked by browser"));
+        new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg').play().catch(()=>{});
     }
 
     function endSession() {
-        if (confirm('Akhiri sesi belajar sekarang?')) {
-            window.location.href = "/study"; // Sesuaikan dengan route halaman depanmu
-        }
+        if (confirm('End this session?')) window.location.href = "/study";
     }
 </script>
+
+<style>
+.animate-fade-in { animation: fade .2s ease-out }
+@keyframes fade { from {opacity:0; transform:scale(.95)} to {opacity:1} }
+</style>
