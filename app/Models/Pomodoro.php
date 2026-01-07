@@ -20,5 +20,11 @@ class Pomodoro extends Model
         'study_id',
         'focus_time',
         'rest_time',
+        'total_cycles',
+        'current_cycle',
+        'remaining_seconds',
+        'is_focus',
+        'status',
+        'completed_at',
     ];
 }

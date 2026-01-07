@@ -41,7 +41,6 @@ class StudyController extends Controller
 
         // 3. Tambahkan count berdasarkan tipenya
         if ($request->study_type === 'Pomodoro') {
-            $counting->increment('pomodoro_count');
             return redirect()->route('pomodoro.show', $study->study_id);
         } else {
             $counting->increment('active_count');
@@ -58,8 +57,10 @@ class StudyController extends Controller
 
     public function pomodoroPage($id)
     {
-        // Ambil data study untuk memastikan datanya ada
-        $study = StudyTechnique::findOrFail($id);
+        $study = StudyTechnique::with('pomodoro')
+            ->where('study_id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
 
         return view('pomodoro', compact('study'));
     }
@@ -67,29 +68,97 @@ class StudyController extends Controller
     public function storePomodoro(Request $request)
     {
         $request->validate([
-            'study_id' => 'required|exists:studytechnique,study_id',
+            'study_id'   => 'required|exists:studytechnique,study_id',
             'focus_time' => 'required|integer|min:1|max:60',
-            'rest_time' => 'required|integer|min:1|max:60',
+            'rest_time'  => 'required|integer|min:1|max:60',
+            'cycles'     => 'required|integer|min:1|max:10',
         ]);
 
         // Proses simpan
-        Pomodoro::create([
-            'study_id' => $request->study_id,
-            'focus_time' => $request->focus_time,
-            'rest_time' => $request->rest_time,
-        ]);
+        Pomodoro::updateOrCreate(
+            ['study_id' => $request->study_id],
+            [
+                'focus_time'        => $request->focus_time,
+                'rest_time'         => $request->rest_time,
+                'total_cycles'      => $request->cycles,
+                'current_cycle'     => 1,
+                'is_focus'          => true,
+                'remaining_seconds' => $request->focus_time * 60,
+                'status'            => 'in_progress',
+                'started_at'        => now(),
+            ]
+        );
 
         return response()->json(['status' => 'success']);
     }
 
+    public function savePomodoroState(Request $request)
+    {
+        $request->validate([
+            'study_id'          => 'required|exists:studytechnique,study_id',
+            'remaining_seconds' => 'required|integer|min:0',
+            'current_cycle'     => 'required|integer|min:1',
+            'is_focus'          => 'required|boolean',
+            'focus_time'        => 'required|integer|min:1',
+            'rest_time'         => 'required|integer|min:1',
+            'total_cycles'      => 'required|integer|min:1',
+        ]);
+
+        $pomodoro = Pomodoro::where('study_id', $request->study_id)->first();
+
+        if (!$pomodoro || $pomodoro->status === 'completed') {
+            return response()->json(['status' => 'ignored']);
+        }
+
+        $pomodoro->update([
+            'focus_time'        => $request->focus_time,
+            'rest_time'         => $request->rest_time,
+            'total_cycles'      => $request->total_cycles,
+            'current_cycle'     => $request->current_cycle,
+            'remaining_seconds' => $request->remaining_seconds,
+            'is_focus'          => $request->is_focus,
+            'status'            => 'paused',
+        ]);
+
+        return response()->json(['status' => 'saved']);
+    }
+
+    public function completePomodoro($id)
+    {
+        $pomodoro = Pomodoro::where('study_id', $id)->firstOrFail();
+
+        $pomodoro->update([
+            'status' => 'completed',
+            'completed_at' => now(),
+            'remaining_seconds' => 0,
+        ]);
+
+        StudyCounting::where('user_id', auth()->id())
+            ->increment('pomodoro_count');
+
+        return redirect()->route('study.history');
+    }
+
     public function history()
     {
-        // Mengambil semua riwayat belajar user yang sedang login
-        $histories = StudyTechnique::where('user_id', Auth::id())
+        $histories = StudyTechnique::with('pomodoro')
+            ->where('user_id', Auth::id())
             ->latest()
             ->get();
 
         return view('history', compact('histories'));
+    }
+
+    public function destroy($id)
+    {
+        $study = StudyTechnique::where('study_id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        $study->delete();
+
+        return redirect()->route('study.history')
+            ->with('success', 'Study session deleted.');
     }
 
     public function activeRecallPage($id)
@@ -369,10 +438,6 @@ PROMPT;
             ], 500);
         }
     }
-
-
-
-
 
     public function submitAnswer(Request $request)
     {

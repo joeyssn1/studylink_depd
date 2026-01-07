@@ -28,13 +28,14 @@
         </div>
 
         <div class="flex justify-center">
-            <div class="relative w-70 h-70 rounded-full bg-red-200 flex items-center justify-center shadow-lg">
-                <div class="w-50 h-50 rounded-full bg-red-500 flex items-center justify-center shadow-inner">
+            <div class="relative w-64 h-64 rounded-full bg-red-200 flex items-center justify-center shadow-lg">
+                <div class="w-40 h-40 rounded-full bg-red-500 flex items-center justify-center shadow-inner">
                     <img src="{{ asset('images/StudyLink_Logo_3.svg') }}" alt="StudyLink Logo"
-                        class="w-50 h-50 object-contain">
+                        class="w-36 h-36 object-contain">
                 </div>
             </div>
         </div>
+
     </section>
 
     <!-- ================= TECHNIQUES ================= -->
@@ -75,7 +76,7 @@
 
         <div class="grid md:grid-cols-2 gap-8">
             <div class="bg-white p-8 rounded-3xl border shadow-sm flex items-center gap-6">
-                <div class="w-14 h-14 bg-red-500 rounded-full flex items-center justify-center text-white text-2xl">
+                <div class="w-14 h-14 bg-red-400 rounded-full flex items-center justify-center text-white text-2xl">
                     🚀
                 </div>
                 <div>
@@ -259,11 +260,11 @@
                      border transition">
                     <div class="font-bold mb-1">${day}</div>
                     ${dayEvents.length ? `
-                            <div class="flex gap-1 mt-1">
-                                ${dayEvents.slice(0,3).map(() =>
-                                    `<span class="w-2 h-2 bg-red-500 rounded-full"></span>`
-                                ).join('')}
-                            </div>` : ''}
+                                <div class="flex gap-1 mt-1">
+                                    ${dayEvents.slice(0,3).map(() =>
+                                        `<span class="w-2 h-2 bg-red-500 rounded-full"></span>`
+                                    ).join('')}
+                                </div>` : ''}
                 </div>`;
             }
         }
@@ -305,11 +306,11 @@
                                 isCreator
                                     ? `<a href="{{ route('profile') }}" class="text-green-600 font-semibold hover:underline">Manage Event</a>`
                                     : `<form action="/events/${event.id}/leave" method="POST"
-                                                 onsubmit="return confirm('Remove this event?')">
-                                               @csrf
-                                               @method('DELETE')
-                                               <button class="text-red-600 font-semibold hover:underline">Remove Event</button>
-                                           </form>`
+                                                     onsubmit="return confirm('Remove this event?')">
+                                                   @csrf
+                                                   @method('DELETE')
+                                                   <button class="text-red-600 font-semibold hover:underline">Remove Event</button>
+                                               </form>`
                             }
                         </div>
                     </div>`;

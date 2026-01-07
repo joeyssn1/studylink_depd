@@ -49,10 +49,8 @@
                     <!-- DOT -->
                     <div
                         class="absolute -left-[11px] top-1 w-5 h-5 rounded-full
-                        {{ $history->study_type === 'Pomodoro'
-                            ? 'bg-orange-500'
-                            : 'bg-blue-500' }}"
-                    ></div>
+                        {{ $history->study_type === 'Pomodoro' ? 'bg-orange-500' : 'bg-blue-500' }}">
+                    </div>
 
                     <!-- CARD -->
                     <div class="bg-white border rounded-2xl p-6 shadow-sm hover:shadow-md transition">
@@ -60,16 +58,12 @@
                         <div class="flex items-center justify-between gap-3 mb-3">
                             <span
                                 class="px-3 py-1 rounded-full text-xs font-bold
-                                {{ $history->study_type === 'Pomodoro'
-                                    ? 'bg-orange-100 text-orange-600'
-                                    : 'bg-blue-100 text-blue-600' }}"
-                            >
+                                {{ $history->study_type === 'Pomodoro' ? 'bg-orange-100 text-orange-600' : 'bg-blue-100 text-blue-600' }}">
                                 {{ $history->study_type }}
                             </span>
 
                             <span class="text-sm text-gray-400">
-                                {{ \Carbon\Carbon::parse($history->created_at)
-                                    ->translatedFormat('d M Y') }}
+                                {{ \Carbon\Carbon::parse($history->created_at)->translatedFormat('d M Y') }}
                             </span>
                         </div>
 
@@ -78,9 +72,62 @@
                         </h3>
 
                         <p class="text-sm text-gray-500 mt-1">
-                            {{ \Carbon\Carbon::parse($history->created_at)
-                                ->translatedFormat('l') }}
+                            {{ \Carbon\Carbon::parse($history->created_at)->translatedFormat('l') }}
                         </p>
+
+                        {{-- 🔥 POMODORO EXTRA INFO --}}
+                        @if ($history->study_type === 'Pomodoro' && $history->pomodoro)
+                            <div class="mt-4 text-sm text-gray-600 space-y-1">
+
+                                <p>
+                                    Status:
+                                    <span class="font-semibold">
+                                        {{ ucfirst(str_replace('_', ' ', $history->pomodoro->status)) }}
+                                    </span>
+                                </p>
+
+                                <p>
+                                    Cycles completed:
+                                    <span class="font-semibold">
+                                        {{ max(0, $history->pomodoro->current_cycle - 1) }}
+                                        /
+                                        {{ $history->pomodoro->total_cycles }}
+                                    </span>
+                                </p>
+
+                                @if ($history->pomodoro->status !== 'completed')
+                                    <p>
+                                        Time left:
+                                        {{ gmdate('i:s', $history->pomodoro->remaining_seconds ?? 0) }}
+                                    </p>
+                                @endif
+                            </div>
+
+                            {{-- 🔘 ACTION BUTTONS --}}
+                            <div class="mt-4 flex gap-3">
+
+                                {{-- ▶ CONTINUE --}}
+                                @if ($history->pomodoro->status !== 'completed')
+                                    <a href="{{ route('pomodoro.show', $history->study_id) }}"
+                                        class="px-4 py-2 bg-[#c9a348] text-white rounded-lg text-sm font-bold hover:bg-[#b89237]">
+                                        Continue
+                                    </a>
+                                @endif
+
+                                {{-- 🗑 DELETE --}}
+                                <form action="{{ route('study.delete', $history->study_id) }}" method="POST"
+                                    onsubmit="return confirm('Delete this session?')">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button type="submit"
+                                        class="px-4 py-2 bg-red-500 text-white rounded-lg text-sm font-bold hover:bg-red-600">
+                                        Delete
+                                    </button>
+                                </form>
+
+                            </div>
+                        @endif
 
                     </div>
                 </div>
