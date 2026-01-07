@@ -9,32 +9,30 @@
             </h1>
 
             <p class="mt-5 text-gray-600 text-lg">
-                Combine the power of <strong>Pomodoro Technique</strong> and
-                <strong>Active Recall</strong> to study smarter, not longer.
+                Combine the power of <strong>Active Recall</strong> and
+                <strong>Pomodoro Technique</strong> to study smarter, not longer.
             </p>
 
             <div class="mt-6 flex gap-4">
-                <a href="#calendar"
+                {{-- <a href="#calendar" --}}
+                <a href="{{ route('studypage') }}"
                     class="px-6 py-3 rounded-xl bg-red-500 hover:bg-red-600 text-white font-bold shadow-md transition">
-                    Start Focusing
+                    Start Study
                 </a>
 
-                <a href="{{ route('profile') }}"
-                    class="px-6 py-3 rounded-xl border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition">
+                <a href="#calendar"
+                    class="px-6 py-3 rounded-xl border-2 border-gray-300 hover:bg-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition">
                     My Events
                 </a>
             </div>
         </div>
 
         <div class="flex justify-center">
-            <div class="relative w-64 h-64 rounded-full bg-red-100 flex items-center justify-center shadow-lg">
-                <div
-                    class="w-40 h-40 rounded-full bg-red-500 flex items-center justify-center text-white text-5xl font-extrabold">
-                    25
+            <div class="relative w-70 h-70 rounded-full bg-red-200 flex items-center justify-center shadow-lg">
+                <div class="w-50 h-50 rounded-full bg-red-500 flex items-center justify-center shadow-inner">
+                    <img src="{{ asset('images/StudyLink_Logo_3.svg') }}" alt="StudyLink Logo"
+                        class="w-50 h-50 object-contain">
                 </div>
-                <span class="absolute bottom-6 text-sm text-gray-600 tracking-wide">
-                    minutes focus
-                </span>
             </div>
         </div>
     </section>
@@ -81,8 +79,10 @@
                     🚀
                 </div>
                 <div>
-                    <p class="text-gray-500 text-sm font-medium">Pomodoro Sessions</p>
-                    <h3 class="text-3xl font-extrabold text-gray-900">{{ $pomodoro_count }}</h3>
+                    {{-- <p class="text-gray-500 text-sm font-medium">Pomodoro Sessions</p>
+                    <h3 class="text-3xl font-extrabold text-gray-900">{{ $pomodoro_count }}</h3> --}}
+                    <p class="text-gray-500 text-sm font-medium">Active Recall Sessions</p>
+                    <h3 class="text-3xl font-extrabold text-gray-900">{{ $active_count }}</h3>
                 </div>
             </div>
 
@@ -91,8 +91,10 @@
                     🧠
                 </div>
                 <div>
-                    <p class="text-gray-500 text-sm font-medium">Active Recall Sessions</p>
-                    <h3 class="text-3xl font-extrabold text-gray-900">{{ $active_count }}</h3>
+                    {{-- <p class="text-gray-500 text-sm font-medium">Active Recall Sessions</p>
+                    <h3 class="text-3xl font-extrabold text-gray-900">{{ $active_count }}</h3> --}}
+                    <p class="text-gray-500 text-sm font-medium">Pomodoro Sessions</p>
+                    <h3 class="text-3xl font-extrabold text-gray-900">{{ $pomodoro_count }}</h3>
                 </div>
             </div>
         </div>
@@ -125,7 +127,7 @@
 
             <div class="flex flex-col md:flex-row items-center justify-between mb-8 gap-6">
                 <div class="flex items-center gap-6">
-                    <button onclick="prevMonth()" class="w-10 h-10 rounded-full bg-gray-50 hover:bg-green-50">
+                    <button onclick="prevMonth()" class="w-10 h-10 rounded-full bg-gray-50 hover:bg-green-200">
                         <i class="ri-arrow-left-s-line text-xl"></i>
                     </button>
 
@@ -149,12 +151,12 @@
 
                         <!-- YEAR DROPDOWN -->
                         <div id="yearDropdown"
-                            class="hidden absolute top-12 right-0 bg-white border rounded-xl shadow-lg grid grid-cols-3 gap-2 p-4 z-50 w-60">
+                            class="hidden absolute top-12 left-0 bg-white border rounded-xl shadow-lg grid grid-cols-3 gap-2 p-4 z-50 w-60">
                         </div>
 
                     </div>
 
-                    <button onclick="nextMonth()" class="w-10 h-10 rounded-full bg-gray-50 hover:bg-green-50">
+                    <button onclick="nextMonth()" class="w-10 h-10 rounded-full bg-gray-50 hover:bg-green-200">
                         <i class="ri-arrow-right-s-line text-xl"></i>
                     </button>
                 </div>
@@ -205,6 +207,19 @@
         ];
 
         /* =====================
+           MONTH NAVIGATION
+        ====================== */
+        function prevMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        }
+
+        /* =====================
            CALENDAR RENDER
         ====================== */
         function renderCalendar() {
@@ -222,13 +237,16 @@
             const firstDay = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
 
+            // Empty cells before first day
             for (let i = 0; i < firstDay; i++) {
                 calendarDays.innerHTML += `<div></div>`;
             }
 
+            // Days
             for (let day = 1; day <= daysInMonth; day++) {
                 const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 const dayEvents = events[dateKey] ? Object.values(events[dateKey]) : [];
+
                 const isToday =
                     day === today.getDate() &&
                     month === today.getMonth() &&
@@ -236,16 +254,16 @@
 
                 calendarDays.innerHTML += `
                 <div onclick="openDay('${dateKey}')"
-                    class="h-24 md:h-32 rounded-xl p-3 cursor-pointer
-                    ${isToday ? 'bg-green-100' : 'bg-gray-50 hover:bg-white'}
-                    border transition">
+                     class="h-24 md:h-32 rounded-xl p-3 cursor-pointer
+                     ${isToday ? 'bg-green-100' : 'bg-gray-50 hover:bg-white'}
+                     border transition">
                     <div class="font-bold mb-1">${day}</div>
                     ${dayEvents.length ? `
-                                <div class="flex gap-1 mt-1">
-                                    ${dayEvents.slice(0,3).map(() =>
-                                        `<span class="w-2 h-2 bg-red-500 rounded-full"></span>`
-                                    ).join('')}
-                                </div>` : ''}
+                            <div class="flex gap-1 mt-1">
+                                ${dayEvents.slice(0,3).map(() =>
+                                    `<span class="w-2 h-2 bg-red-500 rounded-full"></span>`
+                                ).join('')}
+                            </div>` : ''}
                 </div>`;
             }
         }
@@ -287,11 +305,11 @@
                                 isCreator
                                     ? `<a href="{{ route('profile') }}" class="text-green-600 font-semibold hover:underline">Manage Event</a>`
                                     : `<form action="/events/${event.id}/leave" method="POST"
-                                                     onsubmit="return confirm('Remove this event?')">
-                                                   @csrf
-                                                   @method('DELETE')
-                                                   <button class="text-red-600 font-semibold hover:underline">Remove Event</button>
-                                               </form>`
+                                                 onsubmit="return confirm('Remove this event?')">
+                                               @csrf
+                                               @method('DELETE')
+                                               <button class="text-red-600 font-semibold hover:underline">Remove Event</button>
+                                           </form>`
                             }
                         </div>
                     </div>`;
@@ -366,15 +384,18 @@
            OUTSIDE CLICK CLOSE
         ====================== */
         document.addEventListener('click', e => {
-            if (!e.target.closest('#monthBtn') &&
+            if (
+                !e.target.closest('#monthBtn') &&
                 !e.target.closest('#yearBtn') &&
                 !e.target.closest('#monthDropdown') &&
-                !e.target.closest('#yearDropdown')) {
+                !e.target.closest('#yearDropdown')
+            ) {
                 monthDropdown.classList.add('hidden');
                 yearDropdown.classList.add('hidden');
             }
         });
 
+        // Initial render
         renderCalendar();
     </script>
 
