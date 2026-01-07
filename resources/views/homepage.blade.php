@@ -123,7 +123,7 @@
         <div class="bg-white border rounded-3xl shadow-xl p-6 md:p-10">
 
             <h2 class="text-2xl font-bold text-gray-900 mb-8 text-center">
-                Study Calendar 🗓️
+                Event Calendar 🗓️
             </h2>
 
             <div class="flex flex-col md:flex-row items-center justify-between mb-8 gap-6">
@@ -256,7 +256,7 @@
                 calendarDays.innerHTML += `
                 <div onclick="openDay('${dateKey}')"
                     class="h-20 md:h-24 rounded-lg p-2 cursor-pointer
-                     ${isToday ? 'bg-green-100' : 'bg-gray-50 hover:bg-white'}
+                     ${isToday ? 'bg-green-200' : 'bg-gray-50 hover:bg-white'}
                      border transition">
                     <div class="font-bold mb-1">${day}</div>
                     ${dayEvents.length ? `
@@ -293,7 +293,7 @@
                         <div class="flex justify-between mb-2">
                             <strong>${event.event_name}</strong>
                             <span class="text-xs px-2 py-1 rounded-full ${
-                                isCreator ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'
+                                isCreator ? 'bg-green-200 text-green-700' : 'bg-gray-100 text-gray-600'
                             }">
                                 ${isCreator ? 'Creator' : 'Joined'}
                             </span>
@@ -331,7 +331,7 @@
            MONTH DROPDOWN
         ====================== */
         monthDropdown.innerHTML = monthNames.map((m, i) => `
-        <button class="px-3 py-2 rounded-lg hover:bg-green-100 text-sm"
+        <button class="px-3 py-2 rounded-lg hover:bg-green-200 text-sm"
                 onclick="selectMonth(${i})">
             ${m}
         </button>
@@ -360,8 +360,8 @@
             }
 
             yearDropdown.innerHTML = years.map(y => `
-            <button class="px-3 py-2 rounded-lg hover:bg-green-100 text-sm ${
-                y === currentYear ? 'bg-green-50 font-bold' : ''
+            <button class="px-3 py-2 rounded-lg hover:bg-green-200 text-sm ${
+                y === currentYear ? 'bg-green-200 font-bold' : ''
             }"
             onclick="selectYear(${y})">
                 ${y}
