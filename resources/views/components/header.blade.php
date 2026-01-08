@@ -4,11 +4,8 @@
     <div class="max-w-5xl mx-auto flex items-center justify-between px-4">
 
         <!-- Logo -->
-        <div class="flex items-center space-x-2 py-4">
-            <div class="w-7 h-7 bg-white rounded-md flex items-center justify-center">
-                <span class="text-[#22335F] font-bold text-sm">SL</span>
-            </div>
-            <h1 class="text-xl font-semibold">StudyLink</h1>
+        <div class="flex items-center space-x-2 py-1">
+            <img src="{{ asset('images/StudyLink_Logo_3.svg') }}" alt="StudyLink Logo" class="w-50 h-16 object-contain">
         </div>
 
         <!-- Navigation -->
@@ -24,41 +21,40 @@
 
             <!-- Home -->
             <a href="{{ route('home') }}"
-               class="py-5 transition-all duration-200 {{ request()->routeIs('home') ? $activeClass : $inactiveClass }}">
+                class="py-5 transition-all duration-200 {{ request()->routeIs('home') ? $activeClass : $inactiveClass }}">
                 Home
             </a>
 
             @auth
                 <!-- Study -->
                 <a href="/study"
-                   class="py-5 transition-all duration-200 {{ request()->is('study*') ? $activeClass : $inactiveClass }}">
+                    class="py-5 transition-all duration-200 {{ request()->is('study*') ? $activeClass : $inactiveClass }}">
                     Study
                 </a>
 
                 <!-- History -->
                 <a href="/history"
-                   class="py-5 transition-all duration-200 {{ request()->is('history*') ? $activeClass : $inactiveClass }}">
+                    class="py-5 transition-all duration-200 {{ request()->is('history*') ? $activeClass : $inactiveClass }}">
                     History
                 </a>
 
                 <!-- Profile -->
                 <a href="{{ route('profile') }}"
-                   class="py-5 transition-all duration-200 {{ request()->routeIs('profile') ? $activeClass : $inactiveClass }}">
+                    class="py-5 transition-all duration-200 {{ request()->routeIs('profile') ? $activeClass : $inactiveClass }}">
                     Profile
                 </a>
 
                 <!-- Logout -->
                 <form action="/logout" method="POST" class="inline ml-4">
                     @csrf
-                    <button type="submit"
-                        class="bg-red-500 hover:bg-red-600 px-3 py-1 rounded transition">
+                    <button type="submit" class="bg-red-500 hover:bg-red-600 px-3 py-1 rounded transition">
                         Logout
                     </button>
                 </form>
             @else
                 <!-- Login -->
                 <a href="{{ route('login') }}"
-                   class="py-5 transition-all duration-200 {{ request()->routeIs('login') ? $activeClass : $inactiveClass }}">
+                    class="py-5 transition-all duration-200 {{ request()->routeIs('login') ? $activeClass : $inactiveClass }}">
                     Login
                 </a>
             @endauth

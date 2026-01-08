@@ -51,8 +51,10 @@
                 </div>
                 <h3 class="text-xl font-bold text-gray-800 mb-2">Active Recall</h3>
                 <p class="text-gray-600">
-                    Strengthen long-term memory by actively retrieving information
-                    instead of rereading notes.
+                    {{-- Strengthen long-term memory by actively retrieving information
+                    instead of rereading notes. --}}
+                    Strengthen your memory by recalling information
+                    actively with help from an AI study partner.
                 </p>
             </div>
 

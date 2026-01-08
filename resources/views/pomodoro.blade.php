@@ -191,7 +191,7 @@
     }
 
     function updateCycleInfo() {
-        const completed = Math.max(0, currentCycle - 1);
+        const completed = Math.max(1, currentCycle);
         document.getElementById('cycle-info').innerText =
             `Cycles completed: ${completed} / ${totalCycles}`;
     }
