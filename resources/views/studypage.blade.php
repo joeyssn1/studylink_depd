@@ -25,8 +25,8 @@
             <div onclick="toggleModal('modal-active-recall')"
                 class="group cursor-pointer bg-white border rounded-3xl shadow-sm hover:shadow-xl transition p-10 text-center">
                 <div
-                    class="w-16 h-16 rounded-full bg-yellow-200 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition">
-                    <span class="text-2xl font-bold text-red-600">🧠</span>
+                    class="w-16 h-16 rounded-full bg-red-200 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition">
+                    <span class="text-2xl font-bold text-yellow-600">🧠</span>
                 </div>
 
                 <h2 class="text-2xl font-bold mb-3 text-gray-800">
@@ -53,6 +53,10 @@
                     class="w-16 h-16 rounded-full bg-red-200 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition">
                     <span class="text-2xl font-bold text-yellow-600">🍅</span>
                 </div>
+
+                <h2 class="text-2xl font-bold mb-3 text-gray-800">
+                    Pomodoro Technique
+                </h2>
 
                 <p class="text-gray-500 text-sm leading-relaxed mb-6">
                     {{-- Manage your focus using time-boxed sessions
