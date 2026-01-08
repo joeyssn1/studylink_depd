@@ -25,7 +25,7 @@
             <div onclick="toggleModal('modal-active-recall')"
                 class="group cursor-pointer bg-white border rounded-3xl shadow-sm hover:shadow-xl transition p-10 text-center">
                 <div
-                    class="w-16 h-16 rounded-full bg-red-200 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition">
+                    class="w-16 h-16 rounded-full bg-yellow-200 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition">
                     <span class="text-2xl font-bold text-yellow-600">🧠</span>
                 </div>
 
